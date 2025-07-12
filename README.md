@@ -21,7 +21,8 @@ Transform your daily story into insights while discovering the perfect soundtrac
     flutter run  # add flags too here
     ```
 
----
+<br>
+<br>
 
 <div align="center">
     <sub>Made by mobilekenatilang for ITFest IPB 🚀</sub>
