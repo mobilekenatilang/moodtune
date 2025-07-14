@@ -32,6 +32,7 @@ class NavigationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: BaseColors.alabaster,
       body: Stack(
         children: [
           SafeArea(
@@ -41,6 +42,7 @@ class NavigationMenu extends StatelessWidget {
               },
             ),
           ),
+
           // Non-clickable overlay
           Positioned(
             bottom: 0,
@@ -52,6 +54,8 @@ class NavigationMenu extends StatelessWidget {
               child: Container(color: Colors.transparent),
             ),
           ),
+
+          // Blur effect
           Positioned(
             bottom: 0,
             left: 0,
@@ -80,6 +84,8 @@ class NavigationMenu extends StatelessWidget {
               ),
             ),
           ),
+
+          // Navbarnya
           Positioned(
             bottom: 24,
             left: 0,
@@ -126,6 +132,7 @@ class NavigationMenu extends StatelessWidget {
                       ),
                       child: IconButton(
                         onPressed: () {
+                          // TODO: Handle add button press
                           LoggerService.i('Add button pressed');
                         },
                         icon: const Icon(
@@ -161,6 +168,9 @@ class ExamplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(title, style: FontTheme.poppins24w700black()));
+    return Scaffold(
+      backgroundColor: BaseColors.alabaster,
+      body: Center(child: Text(title, style: FontTheme.poppins24w700black())),
+    );
   }
 }
