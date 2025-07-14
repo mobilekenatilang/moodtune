@@ -138,7 +138,7 @@ class NavigationMenu extends StatelessWidget {
                         icon: const Icon(
                           Icons.add,
                           color: BaseColors.white,
-                          size: 24,
+                          size: 28,
                         ),
                       ),
                     ),
