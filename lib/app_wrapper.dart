@@ -38,7 +38,7 @@ class NavigationMenu extends StatelessWidget {
           SafeArea(
             child: BlocBuilder<NavigationCubit, int>(
               builder: (context, selectedIndex) {
-                return _pages[selectedIndex];
+                return IndexedStack(index: selectedIndex, children: _pages);
               },
             ),
           ),
