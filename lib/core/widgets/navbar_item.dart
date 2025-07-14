@@ -18,8 +18,8 @@ class NavItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 50),
+        curve: Curves.easeIn,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
@@ -31,7 +31,7 @@ class NavItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 300),
               child: Icon(
                 item.icon,
                 color: isSelected ? BaseColors.gold3 : BaseColors.gray3,
