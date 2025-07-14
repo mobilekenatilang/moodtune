@@ -9,11 +9,13 @@ Transform your daily story into insights while discovering the perfect soundtrac
 ## ⚙️ Development
 1. Ensure that your Flutter version is **3.32.X**
 2. Fills out the environment variable in `.env` file:
+    
     ```env
     # Example
     MYVAR=XXXX
     ```
 3. Do the *spell* to run the project in development mode!
+    
     ```bash
     flutter clean
     flutter pub get
