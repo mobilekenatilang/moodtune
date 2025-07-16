@@ -52,6 +52,7 @@ class BaseColors {
   static const Color bronze1 = Color(0xFFCD7F32);
   static const Color bronze2 = Color(0xFFAE5906);
   static const Color bronze3 = Color(0xFFA15810);
+  static const Color bronze4 = Color(0xFF854D0E);
 
   // Blue Colors
   static const Color blue1 = Color(0xFF1A73E8);
@@ -60,10 +61,7 @@ class BaseColors {
   // Purple Hearth Colors
   static const Color purpleHearth200 = Color(0xFFC9CEFC);
 
-  static const autoSystemColor = [
-    Color(0xFFD293FF),
-    Color(0xFF3F4FB4),
-  ];
+  static const autoSystemColor = [Color(0xFFD293FF), Color(0xFF3F4FB4)];
 
   // Chip Colors
   static List<Color> chipColors = [
@@ -71,6 +69,18 @@ class BaseColors {
     const Color(0xFFFFF2C7), // Color B
     const Color(0xFFFFE8FC), // Color C
     const Color(0xFFCEFAFF), // Color D
+  ];
+
+  // Homepage gradient colors
+  static List<Color> homepageGradientColors = [
+    goldenrod.withValues(alpha: 0.8),
+    goldenrod.withValues(alpha: 0.6),
+    goldenrod.withValues(alpha: 0.4),
+    goldenrod.withValues(alpha: 0.2),
+    goldenrod.withValues(alpha: 0.1),
+    goldenrod.withValues(alpha: 0.05),
+    goldenrod.withValues(alpha: 0.025),
+    transparent,
   ];
 
   // Additional Colors
