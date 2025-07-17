@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                               color: BaseColors.gray2,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),  
                           Text(
                             '- ${state.quote.a}',
                             style: FontTheme.poppins12w400black().copyWith(
