@@ -6,7 +6,6 @@ import 'package:moodtune/features/calendar/presentation/pages/_pages.dart';
 import 'package:moodtune/features/home/presentation/pages/_pages.dart';
 import 'package:moodtune/services/logger_service.dart';
 import 'dart:ui';
-import 'package:moodtune/features/calendar/presentation/pages/calendar_test_page.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});
@@ -27,8 +26,7 @@ class NavigationMenu extends StatelessWidget {
   static const List<Widget> _pages = [
     HomePage(),
     CalendarPage(),
-    CalendarTestPage(),
-    // ExamplePage(title: "Playlist"),
+    ExamplePage(title: "Playlist"),
     ExamplePage(title: "Profile"),
   ];
 

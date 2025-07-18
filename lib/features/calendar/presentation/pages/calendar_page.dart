@@ -35,7 +35,6 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // **Tambahkan background di luar ListView**
       body: Stack(
         children: [
           // Background gradient
@@ -49,6 +48,8 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
           ),
+
+          // Konten utama
           SafeArea(
             child: BlocBuilder<CalendarCubit, CalendarState>(
               bloc: _cubit,
@@ -59,8 +60,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         horizontal: 18,
                         vertical: 12,
                       ).copyWith(
-                        bottom: 100,
-                        // ✅ extra space agar tidak ketutup navbar (atur sesuai tinggi navbar Anda, misal 80–120)
+                        bottom: 100, 
                       ),
                   children: [
                     // Header: dropdown + panah
@@ -108,8 +108,26 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
           ),
+
+          //FAB di tengah atas (sementara)
+          // Positioned(
+          //   top: 16, // atur jarak dari atas
+          //   left: 0,
+          //   right: 0,
+          //   child: Center(
+          //     child: FloatingActionButton(
+          //       backgroundColor: BaseColors.gold3,
+          //       onPressed: () => Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (_) => const CalendarTestPage()),
+          //       ),
+          //       child: const Icon(Icons.add, color: BaseColors.alabaster),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
   }
+
 }
