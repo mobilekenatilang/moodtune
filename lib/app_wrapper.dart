@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/core/widgets/navbar_item.dart';
+import 'package:moodtune/features/calendar/presentation/pages/_pages.dart';
 import 'package:moodtune/features/home/presentation/pages/_pages.dart';
 import 'package:moodtune/services/logger_service.dart';
 import 'dart:ui';
+import 'package:moodtune/features/calendar/presentation/pages/calendar_test_page.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});
@@ -24,8 +26,9 @@ class NavigationMenu extends StatelessWidget {
   // List of pages to navigate between
   static const List<Widget> _pages = [
     HomePage(),
-    ExamplePage(title: "Status"),
-    ExamplePage(title: "Playlist"),
+    CalendarPage(),
+    CalendarTestPage(),
+    // ExamplePage(title: "Playlist"),
     ExamplePage(title: "Profile"),
   ];
 
