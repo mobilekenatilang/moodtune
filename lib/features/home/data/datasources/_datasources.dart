@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 import 'package:moodtune/core/client/_client.dart';
 import 'package:moodtune/core/constants/_constants.dart';
 import 'package:moodtune/core/environments/_environments.dart';

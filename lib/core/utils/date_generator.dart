@@ -1,4 +1,4 @@
-enum TimeOfDay { morning, afternoon, evening }
+enum TimeOfDay { morning, afternoon, evening, night }
 
 String getFormattedDate(DateTime date) {
   const months = [
@@ -34,9 +34,15 @@ String getFormattedDate(DateTime date) {
 
 TimeOfDay getTimeOfDay(DateTime time) {
   final hour = time.hour;
-  if (hour >= 4 && hour <= 12) return TimeOfDay.morning;
-  if (hour >= 13 && hour <= 17) return TimeOfDay.afternoon;
-  return TimeOfDay.evening;
+  if (hour >= 4 && hour < 12) {
+    return TimeOfDay.morning;
+  } else if (hour >= 12 && hour < 17) {
+    return TimeOfDay.afternoon;
+  } else if (hour >= 17 && hour < 21) {
+    return TimeOfDay.evening;
+  } else {
+    return TimeOfDay.night;
+  }
 }
 
 String getGreeting(DateTime time) {
@@ -47,5 +53,7 @@ String getGreeting(DateTime time) {
       return 'Good Afternoon';
     case TimeOfDay.evening:
       return 'Good Evening';
+    case TimeOfDay.night:
+      return 'Good Night';
   }
 }
