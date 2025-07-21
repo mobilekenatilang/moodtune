@@ -16,15 +16,15 @@ class StreakItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backColor = !isPast
-        ? BaseColors.alabaster
+        ? BaseColors.white
         : isCompleted
         ? BaseColors.gold3
-        : BaseColors.alabaster;
+        : BaseColors.white;
 
     final iconColor = isToday && isCompleted
         ? BaseColors.gold3
         : isCompleted
-        ? BaseColors.alabaster
+        ? BaseColors.white
         : BaseColors.bronze4;
 
     return Container(
@@ -43,10 +43,8 @@ class StreakItem extends StatelessWidget {
               color: backColor,
               shape: BoxShape.circle,
               border: Border.all(
-                color: !isPast && !isToday
-                    ? BaseColors.neutral60
-                    : BaseColors.transparent,
-                width: 0.5,
+                color: !isToday ? BaseColors.neutral60 : BaseColors.transparent,
+                width: 0.2,
               ),
             ),
             child: Center(

@@ -9,10 +9,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late HomepageCubit _cubit;
+  late HomepageJournalCubit _journalCubit;
 
   @override
   void initState() {
     super.initState();
+    _journalCubit = get.get<HomepageJournalCubit>();
+    _journalCubit.init();
     _cubit = get.get<HomepageCubit>();
     _cubit.fetchQuote();
   }
@@ -30,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Container(
-            height: 360,
+            height: MediaQuery.of(context).size.height / 2,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -45,6 +48,8 @@ class _HomePageState extends State<HomePage> {
               _buildHeader(),
               const SizedBox(height: 32),
               _buildStatsSection(),
+              const SizedBox(height: 32),
+              _buildJournalPreview(),
               const SizedBox(height: 90),
             ],
           ),
@@ -103,8 +108,14 @@ class _HomePageState extends State<HomePage> {
             'User!', // TODO: Ambil nama user
             style: FontTheme.poppins24w700black(),
           ),
-          const SizedBox(height: 32),
-          WeeklyStreak(dateNow: DateTime.now()), // TODO: Create cubit for this
+          const SizedBox(height: 24),
+          BlocBuilder<HomepageJournalCubit, HomepageJournalState>(
+            bloc: _journalCubit,
+            buildWhen: (previous, current) => previous.streak != current.streak,
+            builder: (context, state) {
+              return WeeklyStreak(streak: state.streak);
+            },
+          ),
         ],
       ),
     );
@@ -131,17 +142,35 @@ class _HomePageState extends State<HomePage> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: StatsItem(label: 'Best Streak', number: 21),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(child: StatsItem(label: 'Entries', number: 142)),
-                    const SizedBox(width: 16),
-                    Expanded(child: StatsItem(label: 'Days', number: 1500)),
-                  ],
+                child: BlocBuilder<HomepageJournalCubit, HomepageJournalState>(
+                  bloc: _journalCubit,
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: StatsItem(
+                            label: 'Streak',
+                            number: state.streakCount,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: StatsItem(
+                            label: 'Entries',
+                            number: state.totalEntries,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: StatsItem(
+                            label: 'Days',
+                            number: state.daysCount,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 16),
@@ -149,17 +178,17 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(vertical: 22),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
                   backgroundColor: BaseColors.gold3,
                 ),
-                onPressed: () => LoggerService.i("Go to add journal page"),
+                onPressed: () => nav.push(AddJournal()),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'How are you feeling today?',
+                    'Bagaimana perasaanmu hari ini?',
                     style: FontTheme.poppins14w600black().copyWith(
                       color: BaseColors.white,
                     ),
@@ -193,7 +222,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(
                 'Quote of The Day',
-                style: FontTheme.poppins14w600black().copyWith(fontSize: 16),
+                style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
               ),
               const SizedBox(height: 8),
               AnimatedSwitcher(
@@ -244,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                               color: BaseColors.gray2,
                             ),
                           ),
-                          const SizedBox(height: 6),  
+                          const SizedBox(height: 6),
                           Text(
                             '- ${state.quote.a}',
                             style: FontTheme.poppins12w400black().copyWith(
@@ -257,6 +286,89 @@ class _HomePageState extends State<HomePage> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildJournalPreview() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 6, 18, 16),
+      decoration: BoxDecoration(
+        color: BaseColors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: BaseColors.gray2.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Jurnal Minggu Ini',
+                style: FontTheme.poppins14w600black().copyWith(fontSize: 16),
+              ),
+              IconButton(
+                onPressed: () => _journalCubit.updateJournals(),
+                icon: Icon(Icons.refresh, color: BaseColors.gray2, size: 24),
+                padding: EdgeInsets.zero,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          BlocBuilder<HomepageJournalCubit, HomepageJournalState>(
+            bloc: _journalCubit,
+            buildWhen: (previous, current) =>
+                previous.journals != current.journals,
+            builder: (context, state) {
+              if (state.journals.isEmpty) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.book_outlined,
+                          color: BaseColors.gray3,
+                          size: 32,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'No journals this week',
+                          style: FontTheme.poppins14w400black().copyWith(
+                            color: BaseColors.gray2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              return Column(
+                children: [
+                  ...state.journals.map(
+                    (journal) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: JournalCard(
+                        journal: journal,
+                        isPreview: true,
+                        onTap: () {
+                          nav.push(JournalPage(journal: journal));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
