@@ -42,6 +42,7 @@ class BaseColors {
   static const Color gold1 = Color(0xFFFFD668);
   static const Color gold2 = Color(0xFFDDA200);
   static const Color gold3 = Color(0xFFFFC62D);
+  static const Color gold4 = Color(0xfffefbea);
 
   // Silver Colors
   static const Color silver1 = Color(0xFFC7C6C4);
@@ -73,9 +74,10 @@ class BaseColors {
 
   // Homepage gradient colors
   static List<Color> homepageGradientColors = [
-    goldenrod.withValues(alpha: 0.8),
     goldenrod.withValues(alpha: 0.6),
+    goldenrod.withValues(alpha: 0.5),
     goldenrod.withValues(alpha: 0.4),
+    goldenrod.withValues(alpha: 0.3),
     goldenrod.withValues(alpha: 0.2),
     goldenrod.withValues(alpha: 0.1),
     goldenrod.withValues(alpha: 0.05),
