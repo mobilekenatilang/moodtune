@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moodtune/app.dart';
 import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/core/widgets/navbar_item.dart';
 import 'package:moodtune/features/home/presentation/pages/_pages.dart';
-import 'package:moodtune/services/logger_service.dart';
+import 'package:moodtune/features/journal/presentation/pages/_pages.dart';
 import 'dart:ui';
 
 class AppWrapper extends StatelessWidget {
@@ -132,10 +133,7 @@ class NavigationMenu extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
-                          onPressed: () {
-                            // TODO: Handle add button press
-                            LoggerService.i('Add button pressed');
-                          },
+                          onPressed: () => nav.push(AddJournal()),
                           icon: const Icon(
                             Icons.add,
                             color: BaseColors.white,
