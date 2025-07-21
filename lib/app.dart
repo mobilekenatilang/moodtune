@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moodtune/core/constants/_constants.dart';
 import 'package:moodtune/core/themes/_themes.dart';
+import 'package:moodtune/services/pref_service.dart';
 import 'services/navigations/_navigations.dart';
 import 'app_wrapper.dart';
 
@@ -15,6 +17,14 @@ class App extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    // Set tanggal pertama kali aplikasi dibuka
+    if (PrefService.getString(PreferencesKeys.firstOpen) == null) {
+      PrefService.saveString(
+        PreferencesKeys.firstOpen,
+        DateTime.now().millisecondsSinceEpoch.toString(),
+      );
+    }
 
     // TODO: Kalau ada authentication, nanti switch first view disini
 
