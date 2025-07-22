@@ -346,7 +346,6 @@ class _AddJournalState extends State<AddJournal> {
     );
   }
 
-  // TODO: Implement the actual saving logic here
   Journal _saveJournal() {
     if (_isSaveEnabled) {
       final Journal journal;

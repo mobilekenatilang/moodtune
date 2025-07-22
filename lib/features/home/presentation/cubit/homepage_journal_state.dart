@@ -7,8 +7,6 @@ class HomepageJournalState extends Equatable {
   final int daysCount;
   final List<Journal> journals;
 
-  // TODO: Add smth for all journal preview on homepgae
-
   const HomepageJournalState({
     required this.streak,
     required this.streakCount,
