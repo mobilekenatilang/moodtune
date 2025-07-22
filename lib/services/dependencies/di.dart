@@ -12,5 +12,7 @@ final GetIt get = GetIt.I;
 )
 void configureDependencies() {
   get.init();
-  get.registerSingleton<Dio>(Dio());
+  get.registerSingleton<Dio>(
+    Dio(BaseOptions(connectTimeout: Duration(seconds: 300))),
+  );
 }
