@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Jurnal Minggu Ini',
+                'Jurnal Terbaru',
                 style: FontTheme.poppins14w600black().copyWith(fontSize: 16),
               ),
               InkWell(
@@ -337,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'No journals this week',
+                          'Tidak ada jurnal yang kamu buat minggu ini...',
                           style: FontTheme.poppins14w400black().copyWith(
                             color: BaseColors.gray2,
                           ),
@@ -349,18 +349,20 @@ class _HomePageState extends State<HomePage> {
               }
               return Column(
                 children: [
-                  ...state.journals.map(
-                    (journal) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: JournalCard(
-                        journal: journal,
-                        isPreview: true,
-                        onTap: () {
-                          nav.push(JournalPage(journal: journal));
-                        },
+                  ...state.journals
+                      .take(7)
+                      .map(
+                        (journal) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: JournalCard(
+                            journal: journal,
+                            isPreview: true,
+                            onTap: () {
+                              nav.push(JournalPage(journal: journal));
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
                 ],
               );
             },
