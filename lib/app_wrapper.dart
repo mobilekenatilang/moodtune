@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moodtune/app.dart';
 import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/core/widgets/navbar_item.dart';
 import 'package:moodtune/features/home/presentation/pages/_pages.dart';
-import 'package:moodtune/services/logger_service.dart';
-import 'dart:ui';
+
+import 'package:moodtune/features/journal/presentation/pages/_pages.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});
@@ -35,117 +36,75 @@ class NavigationMenu extends StatelessWidget {
       backgroundColor: BaseColors.alabaster,
       body: SafeArea(
         top: false,
-        child: Stack(
+        child: BlocBuilder<NavigationCubit, int>(
+          builder: (context, selectedIndex) {
+            return Stack(
+              children: [
+                _pages[selectedIndex],
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _buildNavbar(context, selectedIndex),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavbar(BuildContext context, int selectedIndex) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            BaseColors.neutral100.withValues(alpha: 0.025),
+            BaseColors.neutral100.withValues(alpha: 0.05),
+            BaseColors.neutral100.withValues(alpha: 0.1),
+            BaseColors.neutral100.withValues(alpha: 0.2),
+          ],
+          stops: const [0.0, 0.3, 0.5, 0.7, 1.0],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BlocBuilder<NavigationCubit, int>(
-              builder: (context, selectedIndex) {
-                return IndexedStack(index: selectedIndex, children: _pages);
-              },
-            ),
-
-            // Non-clickable overlay
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 80,
-              child: IgnorePointer(
-                ignoring: false,
-                child: Container(color: Colors.transparent),
+            Container(
+              width: 280,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: BaseColors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(48)),
               ),
-            ),
-
-            // Blur effect
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      BaseColors.neutral100.withValues(alpha: 0.025),
-                      BaseColors.neutral100.withValues(alpha: 0.05),
-                      BaseColors.neutral100.withValues(alpha: 0.1),
-                      BaseColors.neutral100.withValues(alpha: 0.2),
-                    ],
-                    stops: const [0.0, 0.3, 0.5, 0.7, 1.0],
-                  ),
-                ),
-                child: ClipRRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 0.75, sigmaY: 0.75),
-                    child: Container(color: Colors.transparent),
-                  ),
-                ),
-              ),
-            ),
-
-            // Navbarnya
-            Positioned(
-              bottom: 24,
-              left: 0,
-              right: 0,
-              child: BlocBuilder<NavigationCubit, int>(
-                builder: (context, selectedIndex) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 280,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: BaseColors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(48),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: navbarItems
-                              .map(
-                                (item) => NavItem(
-                                  item: item,
-                                  isSelected:
-                                      navbarItems.indexOf(item) ==
-                                      selectedIndex,
-                                  onTap: () {
-                                    context.read<NavigationCubit>().changeTab(
-                                      navbarItems.indexOf(item),
-                                    );
-                                  },
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: BaseColors.gold3,
-                          shape: BoxShape.circle,
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            // TODO: Handle add button press
-                            LoggerService.i('Add button pressed');
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            color: BaseColors.white,
-                            size: 28,
-                          ),
-                        ),
-                      ),
-                    ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(navbarItems.length, (i) {
+                  final item = navbarItems[i];
+                  return NavItem(
+                    item: item,
+                    isSelected: i == selectedIndex,
+                    onTap: () => context.read<NavigationCubit>().changeTab(i),
                   );
-                },
+                }),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: BaseColors.gold3,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: () => nav.push(AddJournal()),
+                icon: const Icon(Icons.add, color: BaseColors.white, size: 28),
               ),
             ),
           ],

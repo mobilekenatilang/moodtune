@@ -1,4 +1,6 @@
-enum TimeOfDay { morning, afternoon, evening }
+import 'package:intl/intl.dart';
+
+enum TimeOfDay { morning, afternoon, evening, night }
 
 String getFormattedDate(DateTime date) {
   const months = [
@@ -34,18 +36,51 @@ String getFormattedDate(DateTime date) {
 
 TimeOfDay getTimeOfDay(DateTime time) {
   final hour = time.hour;
-  if (hour >= 4 && hour <= 12) return TimeOfDay.morning;
-  if (hour >= 13 && hour <= 17) return TimeOfDay.afternoon;
-  return TimeOfDay.evening;
+  if (hour >= 4 && hour < 12) {
+    return TimeOfDay.morning;
+  } else if (hour >= 12 && hour < 17) {
+    return TimeOfDay.afternoon;
+  } else if (hour >= 17 && hour < 21) {
+    return TimeOfDay.evening;
+  } else {
+    return TimeOfDay.night;
+  }
 }
 
 String getGreeting(DateTime time) {
   switch (getTimeOfDay(time)) {
     case TimeOfDay.morning:
-      return 'Good Morning';
+      return 'Selamat Pagi';
     case TimeOfDay.afternoon:
-      return 'Good Afternoon';
+      return 'Selamat Siang';
     case TimeOfDay.evening:
-      return 'Good Evening';
+      return 'Selamat Sore';
+    case TimeOfDay.night:
+      return 'Selamat Malam';
+  }
+}
+
+DateTime getStartOfWeek(DateTime date) {
+  final weekday = date.weekday;
+  final daysToSubtract = weekday - DateTime.monday;
+  return date.subtract(Duration(days: daysToSubtract));
+}
+
+String getTime(DateTime postDate) {
+  final now = DateTime.now();
+  final difference = now.difference(postDate);
+
+  final diffInSeconds = difference.inSeconds;
+  final diffInMinutes = difference.inMinutes;
+  final diffInHours = difference.inHours;
+
+  if (diffInSeconds < 60) {
+    return '${diffInSeconds}s';
+  } else if (diffInMinutes < 60) {
+    return '${diffInMinutes}m';
+  } else if (diffInHours < 24) {
+    return '${diffInHours}h';
+  } else {
+    return DateFormat('dd MMM yyyy').format(postDate);
   }
 }

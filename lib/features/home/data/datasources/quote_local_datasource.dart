@@ -10,7 +10,7 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
   Future<Parsed<Map<String, dynamic>>> get() async {
     final saved = PrefService.getString(PreferencesKeys.quote);
 
-    if (saved == null) {
+    if (saved == '{}' || saved == null) {
       throw Exception('No quote found in local storage');
     } else {
       final quoteJson = Map<String, dynamic>.from(
@@ -18,6 +18,10 @@ class QuoteLocalDataSourceImpl implements QuoteLocalDataSource {
       );
 
       final quote = QuoteModel.fromJson(quoteJson);
+
+      LoggerService.i(
+        'Fetched quote from local storage: \n${quote.q} \n- ${quote.a}',
+      );
 
       return Parsed.fromDynamicData(
         200, // 200 buat tanda success
