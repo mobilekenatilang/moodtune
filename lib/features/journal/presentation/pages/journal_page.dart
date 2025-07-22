@@ -11,11 +11,13 @@ class JournalPage extends StatefulWidget {
 
 class _JournalPageState extends State<JournalPage> {
   late DeleteJournalUsecase _deleteJournalUsecase;
+  late Journal _journal;
 
   @override
   void initState() {
     super.initState();
     _deleteJournalUsecase = get.get<DeleteJournalUsecase>();
+    _journal = widget.journal;
   }
 
   @override
@@ -63,7 +65,7 @@ class _JournalPageState extends State<JournalPage> {
                               ),
                               child: Center(
                                 child: Text(
-                                  widget.journal.mood.emoji,
+                                  _journal.mood.emoji,
                                   style: const TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -75,7 +77,7 @@ class _JournalPageState extends State<JournalPage> {
                                 Text(
                                   getFormattedDate(
                                     DateTime.fromMillisecondsSinceEpoch(
-                                      int.parse(widget.journal.timestamp),
+                                      int.parse(_journal.timestamp),
                                     ),
                                   ),
                                   style: FontTheme.poppins12w600black()
@@ -83,9 +85,9 @@ class _JournalPageState extends State<JournalPage> {
                                 ),
                                 const SizedBox(height: 1),
                                 Text(
-                                  widget.journal.mood == Mood.unknown
+                                  _journal.mood == Mood.unknown
                                       ? 'Hmm..'
-                                      : widget.journal.mood.name.capitalize(),
+                                      : _journal.mood.name.capitalize(),
                                   style: FontTheme.poppins12w600black()
                                       .copyWith(
                                         color: BaseColors.gray2,
@@ -98,17 +100,17 @@ class _JournalPageState extends State<JournalPage> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          widget.journal.title,
+                          _journal.title,
                           style: FontTheme.poppins22w700black(),
                         ),
                         const SizedBox(height: 14),
                         Text(
-                          widget.journal.content,
+                          _journal.content,
                           style: FontTheme.poppins14w400black().copyWith(
                             height: 1.5,
                           ),
                         ),
-                        if (widget.journal.advice?.isNotEmpty == true) ...[
+                        if (_journal.advice?.isNotEmpty == true) ...[
                           const SizedBox(height: 20),
                           Container(
                             padding: const EdgeInsets.all(16),
@@ -139,9 +141,12 @@ class _JournalPageState extends State<JournalPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  widget.journal.advice!,
-                                  style: FontTheme.poppins14w400black()
-                                      .copyWith(height: 1.4),
+                                  _journal.advice!,
+                                  style: FontTheme.poppins12w400black()
+                                      .copyWith(
+                                        height: 1.4,
+                                        color: BaseColors.gray2,
+                                      ),
                                 ),
                               ],
                             ),
@@ -200,20 +205,18 @@ class _JournalPageState extends State<JournalPage> {
                 ),
               ),
             ),
-            if (widget.journal.advice?.isEmpty ?? true) ...[
+            if (_journal.advice?.isEmpty ?? true) ...[
               const SizedBox(width: 14),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Implement analyze functionality
-                  },
+                  onPressed: () => _navigateToAnalyze(),
                   icon: Icon(
                     LucideIcons.sparkles,
                     color: BaseColors.white,
                     size: 20,
                   ),
                   label: Text(
-                    'Analyze',
+                    'Analisis',
                     style: FontTheme.poppins14w600black().copyWith(
                       color: BaseColors.white,
                       fontSize: 15,
@@ -262,15 +265,15 @@ class _JournalPageState extends State<JournalPage> {
       ),
       actions: [
         IconButton(
-          onPressed: widget.journal.advice?.isEmpty ?? true
+          onPressed: _journal.advice?.isEmpty ?? true
               ? () => nav.pushReplacement(
-                  AddJournal(journal: widget.journal, isEditing: true),
+                  AddJournal(journal: _journal, isEditing: true),
                 )
               : () {
                   LoggerService.i('Music button pressed');
                 },
           icon: Icon(
-            widget.journal.advice?.isEmpty ?? true
+            _journal.advice?.isEmpty ?? true
                 ? LucideIcons.edit
                 : LucideIcons.headphones,
             size: 20,
@@ -381,9 +384,7 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<void> _deleteJournal() async {
-    final result = await _deleteJournalUsecase.execute(
-      widget.journal.timestamp,
-    );
+    final result = await _deleteJournalUsecase.execute(_journal.timestamp);
 
     result.fold(
       (failure) {
@@ -401,8 +402,19 @@ class _JournalPageState extends State<JournalPage> {
     );
   }
 
+  void _navigateToAnalyze() {
+    nav.push(AnalyzeJournal(journal: _journal)).then((result) {
+      if (result != null && result is Journal) {
+        setState(() {
+          _journal = result;
+        });
+        get.get<HomepageJournalCubit>().updateJournals();
+      }
+    });
+  }
+
   Color _backgroundColor() {
-    switch (widget.journal.mood) {
+    switch (_journal.mood) {
       case Mood.happy:
         return const Color(0xFFF9EEB0);
       case Mood.calm:

@@ -60,7 +60,7 @@ class JournalCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    journal.content,
+                    journal.content.trim().replaceAll('\n', ' '),
                     style: FontTheme.poppins10w400black().copyWith(height: 1.3),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,

@@ -33,7 +33,7 @@ class JournalRemoteDataSourceImpl implements JournalRemoteDataSource {
       model: data,
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 201) {
       return Parsed.fromDynamicData(response.statusCode ?? 500, {
         'error': 'Failed to analyze journal',
       });
