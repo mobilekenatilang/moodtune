@@ -40,7 +40,7 @@ class NavigationMenu extends StatelessWidget {
           builder: (context, selectedIndex) {
             return Stack(
               children: [
-                IndexedStack(index: selectedIndex, children: _pages),
+                _pages[selectedIndex],
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: _buildNavbar(context, selectedIndex),
