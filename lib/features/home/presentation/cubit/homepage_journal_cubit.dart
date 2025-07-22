@@ -26,6 +26,30 @@ class HomepageJournalCubit extends Cubit<HomepageJournalState> {
     );
   }
 
+  Future<void> updateJournals() async {
+    final journals = await _getJournalByWeekUsecase.execute(DateTime.now());
+    journals.fold(
+      (failure) {
+        LoggerService.e('Error updating journals: ${failure.message}');
+      },
+      (success) async {
+        if (success.data['result'].isEmpty) {
+          LoggerService.w('No journals found for the current week');
+          emit(state.copyWith(journals: []));
+        } else {
+          emit(
+            state.copyWith(
+              streak: await _fetchStreak(),
+              streakCount: 21, // TODO: Actually fetch this from the database
+              totalEntries: await SqfliteService.count('journal'),
+              journals: success.data['result'] as List<Journal>,
+            ),
+          );
+        }
+      },
+    );
+  }
+
   Future<List<int>> _fetchStreak() async {
     final now = DateTime.now();
     final today = now.day;
@@ -73,25 +97,6 @@ class HomepageJournalCubit extends Cubit<HomepageJournalState> {
     final now = DateTime.now();
     final difference = now.difference(firstOpenDate).inDays;
     return difference < 0 ? 0 : difference;
-  }
-
-  Future<void> updateJournals() async {
-    final journals = await _getJournalByWeekUsecase.execute(DateTime.now());
-    journals.fold(
-      (failure) {
-        LoggerService.e('Error updating journals: ${failure.message}');
-      },
-      (success) {
-        if (success.data['result'].isEmpty) {
-          LoggerService.w('No journals found for the current week');
-          emit(state.copyWith(journals: []));
-        } else {
-          emit(
-            state.copyWith(journals: success.data['result'] as List<Journal>),
-          );
-        }
-      },
-    );
   }
 
   Future<List<Journal>> _initJournals() async {

@@ -44,11 +44,12 @@ class _HomePageState extends State<HomePage> {
           ),
           ListView(
             padding: const EdgeInsets.all(18),
+            physics: const ClampingScrollPhysics(),
             children: [
               _buildHeader(),
               const SizedBox(height: 32),
               _buildStatsSection(),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
               _buildJournalPreview(),
               const SizedBox(height: 90),
             ],
@@ -291,19 +292,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildJournalPreview() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 6, 18, 16),
-      decoration: BoxDecoration(
-        color: BaseColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: BaseColors.gray2.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         children: [
           Row(
@@ -313,14 +303,21 @@ class _HomePageState extends State<HomePage> {
                 'Jurnal Minggu Ini',
                 style: FontTheme.poppins14w600black().copyWith(fontSize: 16),
               ),
-              IconButton(
-                onPressed: () => _journalCubit.updateJournals(),
-                icon: Icon(Icons.refresh, color: BaseColors.gray2, size: 24),
-                padding: EdgeInsets.zero,
+              InkWell(
+                onTap: () => _journalCubit.updateJournals(),
+                borderRadius: BorderRadius.circular(20),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(
+                    Icons.refresh,
+                    color: BaseColors.neutral70,
+                    size: 20,
+                  ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           BlocBuilder<HomepageJournalCubit, HomepageJournalState>(
             bloc: _journalCubit,
             buildWhen: (previous, current) =>
