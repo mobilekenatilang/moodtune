@@ -124,3 +124,11 @@ class UnAuthorizeFailure extends Failure {
 class ParseFailure extends Failure {}
 
 class EmptyFailure extends Failure {}
+
+class CacheFailure extends Failure {
+  CacheFailure({
+    super.message,
+  }) : super(
+          title: 'Cache Failure',
+        );
+}

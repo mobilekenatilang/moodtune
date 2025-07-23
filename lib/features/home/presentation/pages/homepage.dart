@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late HomepageCubit _cubit;
   late HomepageJournalCubit _journalCubit;
+  late ProfileBloc _profileBloc;
 
   @override
   void initState() {
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePage> {
     _journalCubit.init();
     _cubit = get.get<HomepageCubit>();
     _cubit.fetchQuote();
+    _profileBloc = get.get<ProfileBloc>();
+    _profileBloc.add(FetchProfile());
   }
 
   @override
@@ -105,9 +108,18 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          Text(
-            'User!', // TODO: Ambil nama user
-            style: FontTheme.poppins24w700black(),
+          BlocBuilder<ProfileBloc, ProfileState>(
+            bloc: _profileBloc,
+            builder: (context, state) {
+              String userName = 'User';
+              if (state is ProfileLoaded && state.profile.name.isNotEmpty) {
+                userName = state.profile.name.split(' ').first; // Ambil nama depan saja
+              }
+              return Text(
+                '$userName!',
+                style: FontTheme.poppins24w700black(),
+              );
+            },
           ),
           const SizedBox(height: 24),
           BlocBuilder<HomepageJournalCubit, HomepageJournalState>(

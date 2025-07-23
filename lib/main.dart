@@ -8,10 +8,28 @@ import 'app.dart';
 Future<void> main() async {
   // Initialize services and dependencies
   WidgetsFlutterBinding.ensureInitialized();
-  await PrefService.init();
-  await SqfliteService.init();
-  configureDependencies();
-
-  // Running the app
-  runApp(const App());
+  
+  try {
+    await PrefService.init();
+    print('✅ PrefService initialized');
+    
+    await SqfliteService.init();
+    print('✅ SqfliteService initialized');
+    
+    await configureDependencies();
+    print('✅ Dependencies configured');
+    
+    // Running the app
+    runApp(const App());
+  } catch (e) {
+    print('❌ Error during initialization: $e');
+    // Show error screen or fallback
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Error: $e', style: TextStyle(color: Colors.red)),
+        ),
+      ),
+    ));
+  }
 }

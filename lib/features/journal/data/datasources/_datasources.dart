@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:injectable/injectable.dart';
 import 'package:moodtune/core/client/_client.dart';
 import 'package:moodtune/core/environments/_environments.dart';
 import 'package:moodtune/core/extensions/_extensions.dart';
 import 'package:moodtune/features/journal/data/model/analyzed.dart';
 import 'package:moodtune/features/journal/data/model/journal.dart';
+import 'package:moodtune/features/profile/presentation/bloc/profie_bloc.dart';
+import 'package:moodtune/services/dependencies/di.dart';
 import 'package:moodtune/services/logger_service.dart';
 import 'package:moodtune/services/sqflite_service.dart';
 
