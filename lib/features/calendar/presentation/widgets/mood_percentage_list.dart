@@ -34,9 +34,11 @@ class MoodPercentageList extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  width:
-                      60, 
-                  child: Text(e.key, style: FontTheme.poppins14w500black()),
+                  width: 60,
+                  child: Text(
+                    _capitalize(e.key),
+                    style: FontTheme.poppins14w500black(),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -77,4 +79,9 @@ class MoodPercentageList extends StatelessWidget {
     };
     return emojiMap[label.toLowerCase()] ?? '🙂';
   }
+}
+
+String _capitalize(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
 }

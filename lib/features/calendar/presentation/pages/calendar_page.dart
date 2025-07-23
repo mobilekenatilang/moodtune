@@ -54,14 +54,15 @@ class _CalendarPageState extends State<CalendarPage> {
             child: BlocBuilder<CalendarCubit, CalendarState>(
               bloc: _cubit,
               builder: (context, state) {
+                if (state.isLoading) {
+                  return _buildSkeleton();
+                }
+
                 return ListView(
-                  padding:
-                      const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 12,
-                      ).copyWith(
-                        bottom: 100, 
-                      ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 12,
+                  ).copyWith(bottom: 100),
                   children: [
                     // Header: dropdown + panah
                     Row(
@@ -106,7 +107,8 @@ class _CalendarPageState extends State<CalendarPage> {
                   ],
                 );
               },
-            ),
+            )
+
           ),
 
           //FAB di tengah atas (sementara)
@@ -129,5 +131,52 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
+  Widget _buildSkeleton() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      children: [
+        Container(
+          height: 30,
+          width: 120,
+          margin: const EdgeInsets.only(bottom: 20),
+          decoration: BoxDecoration(
+            color: BaseColors.gray4,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        GridView.count(
+          crossAxisCount: 7,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          children: List.generate(
+            42,
+            (index) => Container(
+              margin: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: BaseColors.gray4.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 32),
+        Column(
+          children: List.generate(
+            3,
+            (index) => Container(
+              height: 20,
+              margin: const EdgeInsets.symmetric(vertical: 6),
+              decoration: BoxDecoration(
+                color: BaseColors.gray4.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
 
 }
