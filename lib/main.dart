@@ -10,13 +10,26 @@ import 'features/calendar/data/model/adapter.dart';
 Future<void> main() async {
   // Initialize services and dependencies
   WidgetsFlutterBinding.ensureInitialized();
-  await PrefService.init();
+
+  try {
+    await PrefService.init();
   await SqfliteService.init();
   await Hive.initFlutter();
   Hive.registerAdapter(DayMoodModelAdapter());
   Hive.registerAdapter(MonthMoodSummaryModelAdapter());
   await configureDependencies();
-
-  // Running the app
-  runApp(const App());
+    
+    // Running the app
+    runApp(const App());
+  } catch (e) {
+    print('❌ Error during initialization: $e');
+    // Show error screen or fallback
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Error: $e', style: TextStyle(color: Colors.red)),
+        ),
+      ),
+    ));
+  }
 }
