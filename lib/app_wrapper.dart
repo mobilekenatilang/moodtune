@@ -5,6 +5,7 @@ import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/core/widgets/navbar_item.dart';
 import 'package:moodtune/features/home/presentation/pages/_pages.dart';
 import 'package:moodtune/features/journal/presentation/pages/_pages.dart';
+import 'package:moodtune/features/calendar/presentation/pages/_pages.dart';
 import 'package:moodtune/features/playlist/presentation/pages/_pages.dart';
 import 'package:moodtune/features/profile/presentation/pages/profile_page.dart';
 
@@ -26,7 +27,7 @@ class NavigationMenu extends StatelessWidget {
   // List of pages to navigate between
   static const List<Widget> _pages = [
     HomePage(),
-    ExamplePage(title: "Status"),
+    CalendarPage(),
     PlaylistDemoPage(),
     ProfilePage(),
   ];

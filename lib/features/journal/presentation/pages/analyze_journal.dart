@@ -23,6 +23,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
 
   late AnalyzeJournalUsecase _analyzeUsecase;
   late UpdateJournalUsecase _updateUsecase;
+  late CalendarUsecases _calendarUsecases;
 
   bool _isLoading = true;
   bool _hasError = false;
@@ -33,6 +34,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
     super.initState();
     _analyzeUsecase = get.get<AnalyzeJournalUsecase>();
     _updateUsecase = get.get<UpdateJournalUsecase>();
+    _calendarUsecases = get.get<CalendarUsecases>();
 
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -448,6 +450,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
         },
         (success) {
           final analyzed = success.data['result'] as Analyzed;
+
           setState(() {
             _analyzed = analyzed;
             _isLoading = false;
@@ -504,6 +507,22 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
         },
         (success) {
           LoggerService.i('Journal updated successfully with analysis');
+        },
+      );
+
+      // Simpan mood hari ini
+      final now = DateTime.now();
+      final dayMood = DayMoodModel(
+        date: DateTime(now.year, now.month, now.day),
+        label: _analyzed!.emotion.label.toLowerCase(),
+        emoji: _analyzed!.emotion.emoji,
+      );
+      final saveRes = await _calendarUsecases.execute({'save': dayMood});
+      saveRes.fold(
+        (fail) => LoggerService.e('Save day mood failed: ${fail.message}'),
+        (parsed) {
+          final saved = parsed.data['result'] as MonthMoodSummaryModel;
+          LoggerService.i('Day mood saved in month ${saved.month}');
         },
       );
 

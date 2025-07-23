@@ -19,7 +19,10 @@ abstract class DioModule {
 Future<void> configureDependencies() async {
   try {
     // Initialize injectable dependencies
-    await get.init();
+  await get.init();
+  get.registerSingleton<Dio>(
+    Dio(BaseOptions(connectTimeout: Duration(seconds: 300))),
+  );
     
     print('✅ Dependencies configured successfully');
   } catch (e) {
