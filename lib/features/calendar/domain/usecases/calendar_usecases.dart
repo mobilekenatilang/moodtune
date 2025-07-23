@@ -12,25 +12,23 @@ class CalendarUsecases
     dynamic args,
   ]) {
     if (args == null) {
-      // Default (bulan ini)
       final now = DateTime.now();
       return _repository.getMonth(now.year, now.month);
+    }
 
-    } else if (args is Map<String, dynamic>) {
-      // Mood di bulan tertentu
-      if (args.containsKey('year') && args.containsKey('month')) {
-        // Ambil mood bulan tertentu
-        return _repository.getMonth(
-          args['year'] as int,
-          args['month'] as int,
-        );
+    if (args is Map<String, dynamic>) {
+      // 1) Simpan mood
+      if (args.containsKey('save')) {
+        return _repository.saveDayMood(args['save'] as DayMoodModel);
       }
-
-    } else if (args.containsKey('save')){
-      // Simpan mood
-      return _repository.saveDayMood(args['save'] as DayMoodModel);
+      
+      // 2) Load bulan tertentu
+      if (args.containsKey('year') && args.containsKey('month')) {
+        return _repository.getMonth(args['year'] as int, args['month'] as int);
+      }
     }
 
     throw Exception('Invalid arguments for CalendarUsecases');
   }
+
 }

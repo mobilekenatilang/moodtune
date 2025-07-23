@@ -37,7 +37,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background gradient
+          // 1) Latar gradient
           Container(
             height: double.infinity,
             decoration: BoxDecoration(
@@ -49,22 +49,18 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
 
-          // Konten utama
+          // 2) Konten utama
           SafeArea(
             child: BlocBuilder<CalendarCubit, CalendarState>(
               bloc: _cubit,
               builder: (context, state) {
-                if (state.isLoading) {
-                  return _buildSkeleton();
-                }
-
                 return ListView(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 18,
                     vertical: 12,
                   ).copyWith(bottom: 100),
                   children: [
-                    // Header: dropdown + panah
+                    // — Header (bulan + panah)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -97,86 +93,112 @@ class _CalendarPageState extends State<CalendarPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    MoodCalendarGrid(
-                      currentMonth: state.currentMonth,
-                      summary: state.summary,
-                    ),
+                    // — Grid tanggal atau skeleton
+                    if (state.isLoading) ...[
+                      _buildGridSkeleton(),
+                    ] else ...[
+                      MoodCalendarGrid(
+                        currentMonth: state.currentMonth,
+                        summary: state.summary,
+                      ),
+                    ],
                     const SizedBox(height: 32),
 
-                    MoodPercentageList(summary: state.summary),
+                    // — Average mood atau skeleton
+                    if (state.isLoading) ...[
+                      _buildAverageSkeleton(),
+                    ] else ...[
+                      MoodPercentageList(summary: state.summary),
+                    ],
                   ],
                 );
               },
-            )
-
+            ),
           ),
-
-          //FAB di tengah atas (sementara)
-          // Positioned(
-          //   top: 16, // atur jarak dari atas
-          //   left: 0,
-          //   right: 0,
-          //   child: Center(
-          //     child: FloatingActionButton(
-          //       backgroundColor: BaseColors.gold3,
-          //       onPressed: () => Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (_) => const CalendarTestPage()),
-          //       ),
-          //       child: const Icon(Icons.add, color: BaseColors.alabaster),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
   }
 
-  Widget _buildSkeleton() {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-      children: [
-        Container(
-          height: 30,
-          width: 120,
-          margin: const EdgeInsets.only(bottom: 20),
-          decoration: BoxDecoration(
-            color: BaseColors.gray4,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        GridView.count(
-          crossAxisCount: 7,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          children: List.generate(
-            42,
-            (index) => Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: BaseColors.gray4.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
+  /// Grid skeleton: 7 kolom × 6 baris, shimmer bulat
+  Widget _buildGridSkeleton() {
+    return GridView.count(
+      crossAxisCount: 7,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: List.generate(42, (i) {
+        return Shimmer.fromColors(
+          baseColor: BaseColors.gray4,
+          highlightColor: BaseColors.gray4.withOpacity(0.5),
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: BaseColors.gray4,
+              shape: BoxShape.circle,
             ),
           ),
-        ),
-        const SizedBox(height: 32),
-        Column(
-          children: List.generate(
-            3,
-            (index) => Container(
-              height: 20,
-              margin: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                color: BaseColors.gray4.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
-      ],
+        );
+      }),
     );
   }
 
-
+  /// Average‑mood skeleton: 3 bar, shimmer horizontal
+  Widget _buildAverageSkeleton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(3, (i) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Shimmer.fromColors(
+            baseColor: BaseColors.gray4,
+            highlightColor: BaseColors.gray4.withOpacity(0.5),
+            child: Row(
+              children: [
+                // label placeholder
+                Container(
+                  width: 60,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: BaseColors.gray4,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // bar placeholder
+                Expanded(
+                  child: Container(
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: BaseColors.gray4,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // persen placeholder
+                Container(
+                  width: 30,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    color: BaseColors.gray4,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // emoji placeholder
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    color: BaseColors.gray4,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
 }

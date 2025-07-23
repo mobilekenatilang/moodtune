@@ -10,7 +10,9 @@ final GetIt get = GetIt.I;
   preferRelativeImports: true,
   asExtension: true,
 )
-void configureDependencies() {
-  get.init();
-  get.registerSingleton<Dio>(Dio());
+Future<void> configureDependencies() async {
+  await get.init();
+  get.registerSingleton<Dio>(
+    Dio(BaseOptions(connectTimeout: Duration(seconds: 300))),
+  );
 }

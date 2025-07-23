@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 enum TimeOfDay { morning, afternoon, evening, night }
 
 String getFormattedDate(DateTime date) {
@@ -48,12 +50,37 @@ TimeOfDay getTimeOfDay(DateTime time) {
 String getGreeting(DateTime time) {
   switch (getTimeOfDay(time)) {
     case TimeOfDay.morning:
-      return 'Good Morning';
+      return 'Selamat Pagi';
     case TimeOfDay.afternoon:
-      return 'Good Afternoon';
+      return 'Selamat Siang';
     case TimeOfDay.evening:
-      return 'Good Evening';
+      return 'Selamat Sore';
     case TimeOfDay.night:
-      return 'Good Night';
+      return 'Selamat Malam';
+  }
+}
+
+DateTime getStartOfWeek(DateTime date) {
+  final weekday = date.weekday;
+  final daysToSubtract = weekday - DateTime.monday;
+  return date.subtract(Duration(days: daysToSubtract));
+}
+
+String getTime(DateTime postDate) {
+  final now = DateTime.now();
+  final difference = now.difference(postDate);
+
+  final diffInSeconds = difference.inSeconds;
+  final diffInMinutes = difference.inMinutes;
+  final diffInHours = difference.inHours;
+
+  if (diffInSeconds < 60) {
+    return '${diffInSeconds}s';
+  } else if (diffInMinutes < 60) {
+    return '${diffInMinutes}m';
+  } else if (diffInHours < 24) {
+    return '${diffInHours}h';
+  } else {
+    return DateFormat('dd MMM yyyy').format(postDate);
   }
 }

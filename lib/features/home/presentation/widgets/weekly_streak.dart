@@ -1,8 +1,8 @@
 part of '_widgets.dart';
 
 class WeeklyStreak extends StatelessWidget {
-  final DateTime? dateNow;
-  const WeeklyStreak({super.key, required this.dateNow});
+  final List<int>? streak;
+  const WeeklyStreak({super.key, required this.streak});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,9 @@ class WeeklyStreak extends StatelessWidget {
           int index = entry.key;
           String day = entry.value;
 
-          // TODO: Ambil dari SharedPreferences
-          bool isToday = index == dateNow!.weekday - 1;
-          bool isPast = index < dateNow!.weekday - 1;
-          bool isCompleted = (index < dateNow!.weekday - 1);
+          bool isPast = streak![index] == 0 || streak![index] == 1;
+          bool isToday = streak![index] == 10 || streak![index] == 11;
+          bool isCompleted = streak![index] % 10 == 1;
 
           return StreakItem(
             day: day,
