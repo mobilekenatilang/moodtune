@@ -18,7 +18,7 @@ class HomepageJournalCubit extends Cubit<HomepageJournalState> {
     emit(
       HomepageJournalState(
         streak: await _fetchStreak(),
-        streakCount: 21, // TODO: Actually fetch this from the database
+        streakCount: await _calculateCurrentStreak(),
         totalEntries: await SqfliteService.count('journal'),
         daysCount: await _getDaysCount(),
         journals: await _initJournals(),
@@ -40,7 +40,7 @@ class HomepageJournalCubit extends Cubit<HomepageJournalState> {
           emit(
             state.copyWith(
               streak: await _fetchStreak(),
-              streakCount: 21, // TODO: Actually fetch this from the database
+              streakCount: await _calculateCurrentStreak(),
               totalEntries: await SqfliteService.count('journal'),
               journals: success.data['result'] as List<Journal>,
             ),
@@ -96,6 +96,63 @@ class HomepageJournalCubit extends Cubit<HomepageJournalState> {
           LoggerService.e('Error fetching streak: $error');
           return state.streak;
         });
+  }
+
+  Future<int> _calculateCurrentStreak() async {
+    try {
+      final journalEntries = await SqfliteService.getAll('journal');
+
+      if (journalEntries.isEmpty) {
+        LoggerService.i('No journal entries found - streak is 0');
+        return 0;
+      }
+
+      final Set<String> journalDates = {};
+
+      for (final entry in journalEntries) {
+        final timestamp = int.parse(entry['timestamp']);
+        final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+        final dateKey =
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+        journalDates.add(dateKey);
+      }
+
+      LoggerService.i('Found journals on ${journalDates.length} unique days');
+
+      final now = DateTime.now();
+      int streakCount = 0;
+      DateTime currentDate = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ); // Start with today
+
+      while (true) {
+        final dateKey =
+            '${currentDate.year}-'
+            '${currentDate.month.toString().padLeft(2, '0')}'
+            '-${currentDate.day.toString().padLeft(2, '0')}';
+
+        if (journalDates.contains(dateKey)) {
+          streakCount++;
+        } else if (!(streakCount == 0 && currentDate.day == now.day)) {
+          break;
+        }
+
+        if (streakCount > 367) {
+          LoggerService.w('Streak calculation safety limit reached (367 days)');
+          break;
+        }
+
+        currentDate = currentDate.subtract(const Duration(days: 1));
+      }
+
+      LoggerService.i('Current streak: $streakCount consecutive days');
+      return streakCount;
+    } catch (error) {
+      LoggerService.e('Error calculating streak: $error');
+      return 0;
+    }
   }
 
   Future<int> _getDaysCount() async {

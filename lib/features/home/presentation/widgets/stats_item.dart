@@ -7,6 +7,14 @@ class StatsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String numberFinal = '0';
+
+    if (label == 'Streak' && number == 367) {
+      numberFinal = '1 year+';
+    } else {
+      numberFinal = number.toString();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,7 +26,7 @@ class StatsItem extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 2),
-        Text(number.toString(), style: FontTheme.poppins22w700black()),
+        Text(numberFinal, style: FontTheme.poppins22w700black()),
       ],
     );
   }
