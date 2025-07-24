@@ -64,22 +64,31 @@ class HomepageJournalCubit extends Cubit<HomepageJournalState> {
           final List<int> streak = [-1, -1, -1, -1, -1, -1, -1];
           streak[weekday - 1] = 10;
 
+          LoggerService.i('Fetched streak data: $value');
+
           for (final row in value) {
             final theDay = DateTime.fromMillisecondsSinceEpoch(
               int.parse(row['timestamp']),
-            ).day;
-            if (theDay == today) {
-              streak[weekday - 1] = 11;
-            } else if (theDay < today) {
-              streak[weekday - 1] = 1;
+            );
+            final theDayDate = theDay.day;
+            final theDayWeekday = theDay.weekday;
+
+            if (theDayDate == today) {
+              streak[theDayWeekday - 1] = 11;
+            } else if (theDayDate < today) {
+              streak[theDayWeekday - 1] = 1;
             }
           }
+
+          LoggerService.i('Streak after processing: $streak');
 
           for (int i = 0; i < weekday; i++) {
             if (streak[i] == -1) {
               streak[i] = 0;
             }
           }
+
+          LoggerService.i('Final streak: $streak');
 
           return streak;
         })
