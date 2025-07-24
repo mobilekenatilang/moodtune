@@ -13,24 +13,26 @@ Future<void> main() async {
 
   try {
     await PrefService.init();
-  await SqfliteService.init();
-  await Hive.initFlutter();
-  Hive.registerAdapter(DailyMoodEntryAdapter());
-  Hive.registerAdapter(DaySummaryModelAdapter());
-  Hive.registerAdapter(MonthMoodSummaryModelAdapter());
-  await configureDependencies();
-    
+    await SqfliteService.init();
+    await Hive.initFlutter();
+    Hive.registerAdapter(DailyMoodEntryAdapter());
+    Hive.registerAdapter(DaySummaryModelAdapter());
+    Hive.registerAdapter(MonthMoodSummaryModelAdapter());
+    await configureDependencies();
+
     // Running the app
     runApp(const App());
   } catch (e) {
     print('❌ Error during initialization: $e');
     // Show error screen or fallback
-    runApp(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Error: $e', style: TextStyle(color: Colors.red)),
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Text('Error: $e', style: TextStyle(color: Colors.red)),
+          ),
         ),
       ),
-    ));
+    );
   }
 }
