@@ -113,12 +113,11 @@ class _HomePageState extends State<HomePage> {
             builder: (context, state) {
               String userName = 'User';
               if (state is ProfileLoaded && state.profile.name.isNotEmpty) {
-                userName = state.profile.name.split(' ').first; // Ambil nama depan saja
+                userName = state.profile.name
+                    .split(' ')
+                    .first; // Ambil nama depan saja
               }
-              return Text(
-                '$userName!',
-                style: FontTheme.poppins24w700black(),
-              );
+              return Text('$userName!', style: FontTheme.poppins24w700black());
             },
           ),
           const SizedBox(height: 24),
@@ -233,9 +232,18 @@ class _HomePageState extends State<HomePage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Quote of The Day',
-                style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(LucideIcons.sparkles, color: BaseColors.gold3, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Quote of The Day',
+                    style: FontTheme.poppins14w600black().copyWith(
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               AnimatedSwitcher(

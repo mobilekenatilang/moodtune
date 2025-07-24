@@ -89,95 +89,100 @@ class _AddJournalState extends State<AddJournal> {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 28, 32, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Judul ceritamu", style: FontTheme.poppins14w600black()),
-                  const SizedBox(height: 8),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: BaseColors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: BaseColors.gray4, width: 1),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(32, 28, 32, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Judul ceritamu",
+                      style: FontTheme.poppins14w600black(),
                     ),
-                    child: TextFormField(
-                      controller: _titleController,
-                      style: FontTheme.roboto14w400black(),
-                      cursorColor: BaseColors.neutral70,
-                      enableInteractiveSelection: true,
-                      contextMenuBuilder: (context, editableTextState) {
-                        return AdaptiveTextSelectionToolbar.editable(
-                          clipboardStatus: ClipboardStatus.pasteable,
-                          onCopy: () => editableTextState.copySelection(
-                            SelectionChangedCause.toolbar,
-                          ),
-                          onCut: () => editableTextState.cutSelection(
-                            SelectionChangedCause.toolbar,
-                          ),
-                          onPaste: () => editableTextState.pasteText(
-                            SelectionChangedCause.toolbar,
-                          ),
-                          onSelectAll: () => editableTextState.selectAll(
-                            SelectionChangedCause.toolbar,
-                          ),
-                          onLookUp: null,
-                          onSearchWeb: null,
-                          onShare: null,
-                          onLiveTextInput: null,
-                          anchors: editableTextState.contextMenuAnchors,
-                        );
-                      },
-                      decoration: InputDecoration(
-                        hintText: "Judul Ceritamu",
-                        hintStyle: FontTheme.roboto14w400black().copyWith(
-                          color: BaseColors.gray3,
-                        ),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        contentPadding: const EdgeInsets.all(12),
-                        counterText: "", // This removes the counter
-                      ),
-                      maxLength: 50,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "Apa yang kamu rasakan sekarang?",
-                    style: FontTheme.poppins14w600black(),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: Container(
+                    const SizedBox(height: 8),
+                    Container(
                       decoration: BoxDecoration(
                         color: BaseColors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: BaseColors.gray4, width: 1),
                       ),
                       child: TextFormField(
-                        controller: _contentController,
+                        controller: _titleController,
                         style: FontTheme.roboto14w400black(),
                         cursorColor: BaseColors.neutral70,
-                        maxLines: null,
-                        expands: true,
-                        textAlignVertical: TextAlignVertical.top,
                         enableInteractiveSelection: true,
+                        contextMenuBuilder: (context, editableTextState) {
+                          return AdaptiveTextSelectionToolbar.editable(
+                            clipboardStatus: ClipboardStatus.pasteable,
+                            onCopy: () => editableTextState.copySelection(
+                              SelectionChangedCause.toolbar,
+                            ),
+                            onCut: () => editableTextState.cutSelection(
+                              SelectionChangedCause.toolbar,
+                            ),
+                            onPaste: () => editableTextState.pasteText(
+                              SelectionChangedCause.toolbar,
+                            ),
+                            onSelectAll: () => editableTextState.selectAll(
+                              SelectionChangedCause.toolbar,
+                            ),
+                            onLookUp: null,
+                            onSearchWeb: null,
+                            onShare: null,
+                            onLiveTextInput: null,
+                            anchors: editableTextState.contextMenuAnchors,
+                          );
+                        },
                         decoration: InputDecoration(
-                          hintText: "Apa yang kamu rasakan?",
+                          hintText: "Judul Ceritamu",
                           hintStyle: FontTheme.roboto14w400black().copyWith(
                             color: BaseColors.gray3,
                           ),
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
-                          contentPadding: const EdgeInsets.all(16),
+                          contentPadding: const EdgeInsets.all(12),
+                          counterText: "", // This removes the counter
+                        ),
+                        maxLength: 50,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Apa yang kamu rasakan sekarang?",
+                      style: FontTheme.poppins14w600black(),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: BaseColors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: BaseColors.gray4, width: 1),
+                        ),
+                        child: TextFormField(
+                          controller: _contentController,
+                          style: FontTheme.roboto14w400black(),
+                          cursorColor: BaseColors.neutral70,
+                          maxLines: null,
+                          expands: true,
+                          textAlignVertical: TextAlignVertical.top,
+                          enableInteractiveSelection: true,
+                          decoration: InputDecoration(
+                            hintText: "Apa yang kamu rasakan?",
+                            hintStyle: FontTheme.roboto14w400black().copyWith(
+                              color: BaseColors.gray3,
+                            ),
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            contentPadding: const EdgeInsets.all(16),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -300,7 +305,13 @@ class _AddJournalState extends State<AddJournal> {
                       child: TextButton(
                         onPressed: () {
                           nav.pop();
-                          nav.pop();
+                          if (widget.isEditing) {
+                            nav.pushReplacement(
+                              JournalPage(journal: widget.journal!),
+                            );
+                          } else {
+                            nav.pop();
+                          }
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: BaseColors.danger,
