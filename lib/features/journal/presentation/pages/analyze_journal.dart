@@ -137,7 +137,6 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                 opacity: _fadeAnimation,
                 child: Column(
                   children: [
-                    // Only show cancel button during loading or error states
                     if (_isLoading || _hasError)
                       Align(
                         alignment: Alignment.topRight,
@@ -154,7 +153,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                               ),
                             ),
                             child: Text(
-                              'Batal',
+                              'Cancel',
                               style: FontTheme.poppins14w500black().copyWith(
                                 color: BaseColors.neutral90,
                               ),
@@ -234,7 +233,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                                 const SizedBox(height: 24),
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.all(24),
+                                  padding: const EdgeInsets.all(20),
                                   decoration: BoxDecoration(
                                     color: BaseColors.white.withValues(
                                       alpha: 0.95,
@@ -273,25 +272,21 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                                             child: Icon(
                                               Icons.auto_awesome,
                                               color: BaseColors.warning,
-                                              size: 20,
+                                              size: 16,
                                             ),
                                           ),
                                           const SizedBox(width: 12),
                                           Text(
-                                            'Saran',
+                                            'Advice',
                                             style:
-                                                FontTheme.poppins14w600black()
-                                                    .copyWith(
-                                                      color:
-                                                          BaseColors.neutral100,
-                                                    ),
+                                                FontTheme.poppins14w600black(),
                                           ),
                                         ],
                                       ),
                                       const SizedBox(height: 12),
                                       Text(
                                         _analyzed!.emotion.advice,
-                                        style: FontTheme.poppins14w400black()
+                                        style: FontTheme.poppins12w400black()
                                             .copyWith(height: 1.6),
                                       ),
                                     ],
@@ -317,7 +312,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                                       ),
                                     ),
                                     child: Text(
-                                      'Lanjutkan',
+                                      'Continue',
                                       style: FontTheme.poppins14w600black()
                                           .copyWith(color: BaseColors.white),
                                     ),
@@ -336,7 +331,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                                       size: 22,
                                     ),
                                     label: Text(
-                                      'Coba Lagi',
+                                      'Try Again',
                                       style: FontTheme.poppins14w600black()
                                           .copyWith(color: BaseColors.white),
                                     ),
@@ -344,7 +339,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                                       backgroundColor: BaseColors.gold3,
                                       foregroundColor: BaseColors.white,
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 24,
+                                        vertical: 20,
                                       ),
                                       elevation: 8,
                                       shadowColor: BaseColors.gold3.withValues(
@@ -368,7 +363,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
                                     ),
                                   ),
                                   child: Text(
-                                    'Kembali',
+                                    "I'll try again later...",
                                     style: FontTheme.poppins14w500black()
                                         .copyWith(
                                           color: BaseColors.neutral90
@@ -399,19 +394,19 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
   }
 
   String _getStatusText() {
-    if (_hasError) return 'Oops, terjadi kesalahan';
-    if (_isLoading) return 'Menganalisis jurnal...';
-    return 'Analisis selesai!';
+    if (_hasError) return 'Oops, something went wrong';
+    if (_isLoading) return 'Analyzing journal...';
+    return 'Analysis complete!';
   }
 
   String _getSubtitleText() {
     if (_hasError) {
-      return 'Tidak dapat menganalisis jurnal saat ini. Silakan coba lagi.';
+      return 'Unable to analyze journal at this time. Please try again.';
     }
     if (_isLoading) {
-      return 'Mohon tunggu sebentar, kami sedang memproses jurnal Anda.';
+      return 'Please wait a moment while we process your journal.';
     }
-    return 'Berikut adalah hasil analisis dan saran untuk Anda.';
+    return 'Here are the analysis results and suggestions for you.';
   }
 
   Color _getBackgroundColor() {

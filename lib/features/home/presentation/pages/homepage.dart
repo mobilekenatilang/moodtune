@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'Bagaimana perasaanmu hari ini?',
+                    'How are you feeling today?',
                     style: FontTheme.poppins14w600black().copyWith(
                       color: BaseColors.white,
                     ),
@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Jurnal Terbaru',
+                'Recent Journals',
                 style: FontTheme.poppins14w600black().copyWith(fontSize: 16),
               ),
               InkWell(
@@ -357,10 +357,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Tidak ada jurnal yang kamu buat minggu ini...',
+                          'No journals found\nfor this week...',
                           style: FontTheme.poppins14w400black().copyWith(
                             color: BaseColors.gray2,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

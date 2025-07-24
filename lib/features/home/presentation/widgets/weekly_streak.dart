@@ -7,13 +7,13 @@ class WeeklyStreak extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> daysOfWeek = [
-      'Sen',
-      'Sel',
-      'Rab',
-      'Kam',
-      'Jum',
-      'Sab',
-      'Min',
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun',
     ];
 
     return ConstrainedBox(

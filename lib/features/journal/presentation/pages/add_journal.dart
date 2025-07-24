@@ -102,7 +102,7 @@ class _AddJournalState extends State<AddJournal> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Judul ceritamu",
+                      'Title of your story',
                       style: FontTheme.poppins14w600black(),
                     ),
                     const SizedBox(height: 8),
@@ -140,7 +140,7 @@ class _AddJournalState extends State<AddJournal> {
                           );
                         },
                         decoration: InputDecoration(
-                          hintText: "Judul Ceritamu",
+                          hintText: 'Write here!',
                           hintStyle: FontTheme.roboto14w400black().copyWith(
                             color: BaseColors.gray3,
                           ),
@@ -155,7 +155,7 @@ class _AddJournalState extends State<AddJournal> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      "Apa yang kamu rasakan sekarang?",
+                      'How are you feeling right now?',
                       style: FontTheme.poppins14w600black(),
                     ),
                     const SizedBox(height: 8),
@@ -175,7 +175,7 @@ class _AddJournalState extends State<AddJournal> {
                           textAlignVertical: TextAlignVertical.top,
                           enableInteractiveSelection: true,
                           decoration: InputDecoration(
-                            hintText: "Apa yang kamu rasakan?",
+                            hintText: 'Write here!',
                             hintStyle: FontTheme.roboto14w400black().copyWith(
                               color: BaseColors.gray3,
                             ),
@@ -207,7 +207,7 @@ class _AddJournalState extends State<AddJournal> {
         children: [
           const SizedBox(height: 8),
           Text(
-            widget.isEditing ? 'Edit Jurnal' : 'Tambah Jurnal',
+            widget.isEditing ? 'Edit Journal' : 'Add Journal',
             style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
           ),
           const SizedBox(height: 2),
@@ -247,11 +247,11 @@ class _AddJournalState extends State<AddJournal> {
                     nav.pushReplacement(
                       JournalPage(journal: journal, fromHome: widget.fromHome),
                     );
-                    showSuccessSnackBar(context, 'Jurnal berhasil disimpan!');
+                    showSuccessSnackBar(context, 'Successfully saved journal!');
                   } catch (e) {
                     // Handle any errors that might occur during saving
                     LoggerService.e('Failed to save journal: ${e.toString()}');
-                    showErrorSnackBar(context, 'Gagal menyimpan jurnal..');
+                    showErrorSnackBar(context, 'Failed to save journal.');
                   }
                 }
               : null,
@@ -292,13 +292,13 @@ class _AddJournalState extends State<AddJournal> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Batalkan ${widget.isEditing ? 'Edit' : 'Tambah'} Jurnal?',
+                  'Cancel ${widget.isEditing ? 'Editing' : 'Adding'} Journal?',
                   style: FontTheme.poppins18w700black(),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Perubahan yang belum disimpan akan hilang dan tidak dapat dikembalikan.',
+                  'Unsaved changes will be lost and cannot be recovered.',
                   style: FontTheme.poppins14w400black().copyWith(
                     color: BaseColors.gray1,
                     height: 1.4,
@@ -333,7 +333,7 @@ class _AddJournalState extends State<AddJournal> {
                           ),
                         ),
                         child: Text(
-                          'Ya, Batalkan',
+                          'Yes, Cancel!',
                           style: FontTheme.poppins14w600black().copyWith(
                             color: BaseColors.white,
                           ),
@@ -353,7 +353,7 @@ class _AddJournalState extends State<AddJournal> {
                           ),
                         ),
                         child: Text(
-                          'Gajadi deh',
+                          'Nevermind',
                           style: FontTheme.poppins14w600black(),
                         ),
                       ),

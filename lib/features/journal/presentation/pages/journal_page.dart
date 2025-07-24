@@ -135,7 +135,7 @@ class _JournalPageState extends State<JournalPage> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Saran',
+                                      'Advice',
                                       style: FontTheme.poppins14w600black(),
                                     ),
                                   ],
@@ -167,17 +167,10 @@ class _JournalPageState extends State<JournalPage> {
         decoration: BoxDecoration(
           color: BaseColors.white,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(32),
-            topRight: Radius.circular(32),
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
           ),
-          border: Border.all(color: BaseColors.gray4, width: 0.5),
-          boxShadow: [
-            BoxShadow(
-              color: BaseColors.gray5.withValues(alpha: 0.8),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
+          border: Border.all(color: BaseColors.gray4, width: 0.7),
         ),
         child: Row(
           children: [
@@ -217,7 +210,7 @@ class _JournalPageState extends State<JournalPage> {
                     size: 20,
                   ),
                   label: Text(
-                    'Analisis',
+                    'Analyze',
                     style: FontTheme.poppins14w600black().copyWith(
                       color: BaseColors.white,
                       fontSize: 15,
@@ -249,7 +242,7 @@ class _JournalPageState extends State<JournalPage> {
         children: [
           const SizedBox(height: 8),
           Text(
-            'Jurnal',
+            'Journal',
             style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
           ),
         ],
@@ -265,24 +258,19 @@ class _JournalPageState extends State<JournalPage> {
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: _journal.advice?.isEmpty ?? true
-              ? () => nav.pushReplacement(
-                  AddJournal(journal: _journal, isEditing: true),
-                )
-              : () {
-                  LoggerService.i('Music button pressed');
-                },
-          icon: Icon(
-            _journal.advice?.isEmpty ?? true
-                ? LucideIcons.edit
-                : LucideIcons.headphones,
-            size: 20,
-            color: BaseColors.neutral100,
+        if (_journal.advice?.isEmpty ?? true)
+          IconButton(
+            onPressed: () => nav.pushReplacement(
+              AddJournal(journal: _journal, isEditing: true),
+            ),
+            icon: Icon(
+              LucideIcons.edit,
+              size: 20,
+              color: BaseColors.neutral100,
+            ),
+            splashColor: BaseColors.transparent,
+            highlightColor: BaseColors.transparent,
           ),
-          splashColor: BaseColors.transparent,
-          highlightColor: BaseColors.transparent,
-        ),
       ],
     );
   }
@@ -317,13 +305,13 @@ class _JournalPageState extends State<JournalPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Hapus Jurnal?',
+                  'Delete Journal?',
                   style: FontTheme.poppins18w700black(),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Jurnal yang dihapus tidak dapat dikembalikan.',
+                  'Deleted journals cannot be restored.',
                   style: FontTheme.poppins14w400black().copyWith(
                     color: BaseColors.gray1,
                     height: 1.4,
@@ -349,7 +337,7 @@ class _JournalPageState extends State<JournalPage> {
                           ),
                         ),
                         child: Text(
-                          'Ya, Hapus',
+                          'Yes, Delete!',
                           style: FontTheme.poppins14w600black().copyWith(
                             color: BaseColors.white,
                           ),
@@ -369,7 +357,7 @@ class _JournalPageState extends State<JournalPage> {
                           ),
                         ),
                         child: Text(
-                          'Batal',
+                          'Cancel',
                           style: FontTheme.poppins14w600black(),
                         ),
                       ),
