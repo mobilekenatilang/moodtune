@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:moodtune/core/constants/_constants.dart';
 import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/services/pref_service.dart';
+import 'package:moodtune/splash.dart';
 import 'services/navigations/_navigations.dart';
-import 'app_wrapper.dart';
 
 final nav = NavigationService();
 
@@ -33,7 +33,7 @@ class App extends StatelessWidget {
       theme: AppTheme.lightTheme(),
       debugShowCheckedModeBanner: false,
       navigatorKey: nav.navigatorKey,
-      home: const Scaffold(body: AppWrapper()),
+      home: const SplashScreen(),
     );
   }
 }

@@ -5,14 +5,25 @@ import 'di.config.dart';
 
 final GetIt get = GetIt.I;
 
+@module
+abstract class DioModule {
+  @lazySingleton
+  Dio get dio => Dio(BaseOptions(connectTimeout: Duration(seconds: 300)));
+}
+
 @InjectableInit(
   initializerName: 'init',
   preferRelativeImports: true,
   asExtension: true,
 )
-void configureDependencies() {
-  get.init();
-  get.registerSingleton<Dio>(
-    Dio(BaseOptions(connectTimeout: Duration(seconds: 300))),
-  );
+Future<void> configureDependencies() async {
+  try {
+    // Initialize injectable dependencies
+    await get.init();
+    
+    print('✅ Dependencies configured successfully');
+  } catch (e) {
+    print('❌ Error configuring dependencies: $e');
+    rethrow;
+  }
 }

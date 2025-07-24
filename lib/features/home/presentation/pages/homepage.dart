@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late HomepageCubit _cubit;
   late HomepageJournalCubit _journalCubit;
+  late ProfileBloc _profileBloc;
 
   @override
   void initState() {
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePage> {
     _journalCubit.init();
     _cubit = get.get<HomepageCubit>();
     _cubit.fetchQuote();
+    _profileBloc = get.get<ProfileBloc>();
+    _profileBloc.add(FetchProfile());
   }
 
   @override
@@ -51,7 +54,7 @@ class _HomePageState extends State<HomePage> {
               _buildStatsSection(),
               const SizedBox(height: 24),
               _buildJournalPreview(),
-              const SizedBox(height: 90),
+              const SizedBox(height: 100),
             ],
           ),
         ],
@@ -105,9 +108,17 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          Text(
-            'User!', // TODO: Ambil nama user
-            style: FontTheme.poppins24w700black(),
+          BlocBuilder<ProfileBloc, ProfileState>(
+            bloc: _profileBloc,
+            builder: (context, state) {
+              String userName = 'User';
+              if (state is ProfileLoaded && state.profile.name.isNotEmpty) {
+                userName = state.profile.name
+                    .split(' ')
+                    .first; // Ambil nama depan saja
+              }
+              return Text('$userName!', style: FontTheme.poppins24w700black());
+            },
           ),
           const SizedBox(height: 24),
           BlocBuilder<HomepageJournalCubit, HomepageJournalState>(
@@ -185,11 +196,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   backgroundColor: BaseColors.gold3,
                 ),
-                onPressed: () => nav.push(AddJournal()),
+                onPressed: () => nav.push(AddJournal(fromHome: true)),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
-                    'Bagaimana perasaanmu hari ini?',
+                    'How are you feeling today?',
                     style: FontTheme.poppins14w600black().copyWith(
                       color: BaseColors.white,
                     ),
@@ -221,9 +232,18 @@ class _HomePageState extends State<HomePage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Quote of The Day',
-                style: FontTheme.poppins14w600black().copyWith(fontSize: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(LucideIcons.sparkles, color: BaseColors.gold3, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Quote of The Day',
+                    style: FontTheme.poppins14w600black().copyWith(
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               AnimatedSwitcher(
@@ -300,7 +320,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Jurnal Terbaru',
+                'Recent Journals',
                 style: FontTheme.poppins14w600black().copyWith(fontSize: 16),
               ),
               InkWell(
@@ -337,10 +357,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Tidak ada jurnal yang kamu buat minggu ini...',
+                          'No journals found\nfor this week...',
                           style: FontTheme.poppins14w400black().copyWith(
                             color: BaseColors.gray2,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -350,7 +371,7 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 children: [
                   ...state.journals
-                      .take(7)
+                      .take(5)
                       .map(
                         (journal) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
@@ -358,7 +379,9 @@ class _HomePageState extends State<HomePage> {
                             journal: journal,
                             isPreview: true,
                             onTap: () {
-                              nav.push(JournalPage(journal: journal));
+                              nav.push(
+                                JournalPage(journal: journal, fromHome: true),
+                              );
                             },
                           ),
                         ),
@@ -366,6 +389,27 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             },
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              backgroundColor: BaseColors.gold3,
+            ),
+            onPressed: () => nav.push(JournalListPage()),
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                'See More Journals',
+                style: FontTheme.poppins14w600black().copyWith(
+                  color: BaseColors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ],
       ),

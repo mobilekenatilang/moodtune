@@ -4,8 +4,10 @@ import 'package:moodtune/app.dart';
 import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/core/widgets/navbar_item.dart';
 import 'package:moodtune/features/home/presentation/pages/_pages.dart';
-
 import 'package:moodtune/features/journal/presentation/pages/_pages.dart';
+import 'package:moodtune/features/calendar/presentation/pages/_pages.dart';
+import 'package:moodtune/features/playlist/presentation/pages/_pages.dart';
+import 'package:moodtune/features/profile/presentation/pages/profile_page.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});
@@ -25,9 +27,9 @@ class NavigationMenu extends StatelessWidget {
   // List of pages to navigate between
   static const List<Widget> _pages = [
     HomePage(),
-    ExamplePage(title: "Status"),
-    ExamplePage(title: "Playlist"),
-    ExamplePage(title: "Profile"),
+    CalendarPage(),
+    PlaylistDemoPage(),
+    ProfilePage(),
   ];
 
   @override
@@ -103,7 +105,7 @@ class NavigationMenu extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                onPressed: () => nav.push(AddJournal()),
+                onPressed: () => nav.push(AddJournal(fromHome: true)),
                 icon: const Icon(Icons.add, color: BaseColors.white, size: 28),
               ),
             ),
