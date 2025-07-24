@@ -12,7 +12,7 @@ class CalendarRepositoryImpl implements CalendarRepository {
   }
 
   @override
-  Future<Either<Failure, Parsed<Map<String, dynamic>>>> saveDayMood(DayMoodModel mood) async {
+  Future<Either<Failure, Parsed<Map<String, dynamic>>>> saveDayMood(DailyMoodEntry mood) async {
     return apiCall(_localDataSource.saveDayMood(mood));
   }
 }

@@ -15,7 +15,8 @@ Future<void> main() async {
     await PrefService.init();
   await SqfliteService.init();
   await Hive.initFlutter();
-  Hive.registerAdapter(DayMoodModelAdapter());
+  Hive.registerAdapter(DailyMoodEntryAdapter());
+  Hive.registerAdapter(DaySummaryModelAdapter());
   Hive.registerAdapter(MonthMoodSummaryModelAdapter());
   await configureDependencies();
     

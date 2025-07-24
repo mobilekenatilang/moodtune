@@ -29,10 +29,9 @@ class CalendarCubit extends Cubit<CalendarState> {
         emit(
           state.copyWith(
             summary: MonthMoodSummaryModel(
-              year: state.currentMonth.year,
-              month: state.currentMonth.month,
+              year: year,
+              month: month,
               days: [],
-              avgMood: 0,
               labelCount: {},
               lastSync: DateTime.now(),
             ),
@@ -43,18 +42,14 @@ class CalendarCubit extends Cubit<CalendarState> {
       },
       (success) {
         final data = success.data['result'] as MonthMoodSummaryModel?;
-
         if (data == null || data.days.isEmpty) {
-          LoggerService.w(
-            "No mood data found for $month/$year. Showing empty.",
-          );
+          LoggerService.w("No mood data for $month/$year. Showing empty.");
           emit(
             state.copyWith(
               summary: MonthMoodSummaryModel(
                 year: year,
                 month: month,
                 days: [],
-                avgMood: 0,
                 labelCount: {},
                 lastSync: DateTime.now(),
               ),
@@ -70,37 +65,43 @@ class CalendarCubit extends Cubit<CalendarState> {
     );
   }
 
-  Future<void> saveDayMonth(DayMoodModel mood) async {
+  Future<void> saveDayMonth(DailyMoodEntry entry) async {
     emit(state.copyWith(isLoading: true, error: null));
 
-    final result = await _calendarUsecases.execute({'save': mood});
+    final result = await _calendarUsecases.execute({'save': entry});
 
     result.fold(
       (fail) {
         LoggerService.e("Failed to save mood: ${fail.message}");
-        emit(state.copyWith(summary: null, isLoading: false, error: fail.message));
+        emit(
+          state.copyWith(summary: null, isLoading: false, error: fail.message),
+        );
       },
       (success) {
         final updated = success.data['result'] as MonthMoodSummaryModel;
-
-         // LOG UPDATE DATA
         LoggerService.i(
-          "Saved mood for ${mood.date.day}/${mood.date.month}: ${mood.emoji} (${mood.label})",
+          "Saved mood for ${entry.timestamp.day}/${entry.timestamp.month}: "
+          "${entry.emoji} (${entry.label})",
         );
-
         emit(state.copyWith(summary: updated, isLoading: false, error: null));
       },
     );
   }
 
   void nextMonth() {
-    final next = DateTime(state.currentMonth.year, state.currentMonth.month + 1);
+    final next = DateTime(
+      state.currentMonth.year,
+      state.currentMonth.month + 1,
+    );
     emit(state.copyWith(currentMonth: next));
     fetchMonth();
   }
 
   void prevMonth() {
-    final prev = DateTime(state.currentMonth.year, state.currentMonth.month - 1);
+    final prev = DateTime(
+      state.currentMonth.year,
+      state.currentMonth.month - 1,
+    );
     emit(state.copyWith(currentMonth: prev));
     fetchMonth();
   }

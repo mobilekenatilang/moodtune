@@ -37,7 +37,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // 1) Latar gradient
+          // 1) Background gradient
           Container(
             height: double.infinity,
             decoration: BoxDecoration(
@@ -60,7 +60,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     vertical: 12,
                   ).copyWith(bottom: 100),
                   children: [
-                    // — Header (bulan + panah)
+                    // — Header
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -93,7 +93,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    // — Grid tanggal atau skeleton
+                    // — Grid atau skeleton
                     if (state.isLoading) ...[
                       _buildGridSkeleton(),
                     ] else ...[
@@ -104,7 +104,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     ],
                     const SizedBox(height: 32),
 
-                    // — Average mood atau skeleton
+                    // — Average mood harian & bulanan
                     if (state.isLoading) ...[
                       _buildAverageSkeleton(),
                     ] else ...[
@@ -120,8 +120,8 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  /// Grid skeleton: 7 kolom × 6 baris, shimmer bulat
-  Widget _buildGridSkeleton() {
+
+    Widget _buildGridSkeleton() {
     return GridView.count(
       crossAxisCount: 7,
       shrinkWrap: true,
@@ -201,4 +201,5 @@ class _CalendarPageState extends State<CalendarPage> {
       }),
     );
   }
+
 }

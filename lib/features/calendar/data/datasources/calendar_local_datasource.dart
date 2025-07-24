@@ -2,7 +2,7 @@ part of '_datasources.dart';
 
 abstract class CalendarLocalDataSource {
   Future<Parsed<Map<String, dynamic>>> getMonth(int year, int month);
-  Future<Parsed<Map<String, dynamic>>> saveDayMood(DayMoodModel mood);
+  Future<Parsed<Map<String, dynamic>>> saveDayMood(DailyMoodEntry entry);
 }
 
 @Injectable(as: CalendarLocalDataSource)
@@ -15,79 +15,68 @@ class CalendarLocalDataSourceImpl implements CalendarLocalDataSource {
   Future<Parsed<Map<String, dynamic>>> getMonth(int year, int month) async {
     final key = _key(year, month);
     final data = box.get(key);
-
-    if (data == null) {
-      throw Exception('No month data found in local storage for $key');
-    }
-
-    return Parsed.fromDynamicData(
-      200,
-      {'result': data}, 
-    );
+    // Jika belum ada data bulan ini, kembalikan summary kosong
+    final summary =
+        data ??
+        MonthMoodSummaryModel(
+          year: year,
+          month: month,
+          days: [],
+          labelCount: {},
+          lastSync: DateTime.now(),
+        );
+    return Parsed.fromDynamicData(200, {'result': summary});
   }
 
   @override
-  Future<Parsed<Map<String, dynamic>>> saveDayMood(DayMoodModel mood) async {
-    final key = _key(mood.date.year, mood.date.month);
-    final existing = box.get(key);
+  Future<Parsed<Map<String, dynamic>>> saveDayMood(DailyMoodEntry entry) async {
+    final key = _key(entry.timestamp.year, entry.timestamp.month);
+    final raw = box.get(key);
 
-    if (existing == null) {
-      final newSummary = MonthMoodSummaryModel(
-        year: mood.date.year,
-        month: mood.date.month,
-        days: [mood],
-        avgMood: 0,
-        labelCount: {mood.label: 1},
-        lastSync: DateTime.now(),
-      );
-      await box.put(key, newSummary);
+    // Inisialisasi summary bulanan jika belum ada
+    final summary =
+        raw ??
+        MonthMoodSummaryModel(
+          year: entry.timestamp.year,
+          month: entry.timestamp.month,
+          days: [],
+          labelCount: {},
+          lastSync: DateTime.now(),
+        );
 
-      return Parsed.fromDynamicData(200, {'result': newSummary});
-    } else {
-      final updated = _updateSummary(existing, mood);
-      await box.put(key, updated);
-
-      return Parsed.fromDynamicData(200, {'result': updated});
-    }
-  }
-
-  // Helper untuk membuat key unik Hive
-  String _key(int year, int month) =>
-      "$year-${month.toString().padLeft(2, '0')}";
-
-  MonthMoodSummaryModel _updateSummary(
-    MonthMoodSummaryModel oldSummary,
-    DayMoodModel newMood,
-  ) {
-    final days = List<DayMoodModel>.from(oldSummary.days);
-
-    final index = days.indexWhere(
-      (d) =>
-          d.date.year == newMood.date.year &&
-          d.date.month == newMood.date.month &&
-          d.date.day == newMood.date.day,
+    // 1) Append entry ke DaySummaryModel
+    final days = List<DaySummaryModel>.from(summary.days);
+    final dateOnly = DateTime(
+      entry.timestamp.year,
+      entry.timestamp.month,
+      entry.timestamp.day,
     );
-
-    final labelCount = Map<String, int>.from(oldSummary.labelCount);
-
-    if (index == -1) {
-      days.add(newMood);
-      labelCount[newMood.label] = (labelCount[newMood.label] ?? 0) + 1;
+    final idx = days.indexWhere((d) => d.date == dateOnly);
+    if (idx == -1) {
+      // Hari baru
+      days.add(DaySummaryModel(date: dateOnly, entries: [entry]));
     } else {
-      final oldLabel = days[index].label;
-      if (oldLabel != newMood.label) {
-        labelCount[oldLabel] = (labelCount[oldLabel]! - 1).clamp(0, 9999);
-        if (labelCount[oldLabel] == 0) labelCount.remove(oldLabel);
-        labelCount[newMood.label] = (labelCount[newMood.label] ?? 0) + 1;
-      }
-      days[index] = newMood;
+      // Hari sudah ada → tambahkan ke list entries
+      final existing = days[idx];
+      days[idx] = existing.copyWith(entries: [...existing.entries, entry]);
     }
 
-    return oldSummary.copyWith(
+    // 2) Update distribusi bulanan
+    final labelCount = Map<String, int>.from(summary.labelCount);
+    labelCount[entry.label] = (labelCount[entry.label] ?? 0) + 1;
+
+    // 3) Simpan summary yang di‑update
+    final updated = summary.copyWith(
       days: days,
-      avgMood: 0, // di UI hitung persentase
       labelCount: labelCount,
       lastSync: DateTime.now(),
     );
+    await box.put(key, updated);
+
+    return Parsed.fromDynamicData(200, {'result': updated});
   }
+
+  /// Helper untuk key box: "YYYY-MM"
+  String _key(int year, int month) =>
+      '$year-${month.toString().padLeft(2, '0')}';
 }
