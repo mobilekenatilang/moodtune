@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
               _buildStatsSection(),
               const SizedBox(height: 24),
               _buildJournalPreview(),
-              const SizedBox(height: 90),
+              const SizedBox(height: 100),
             ],
           ),
         ],
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   backgroundColor: BaseColors.gold3,
                 ),
-                onPressed: () => nav.push(AddJournal()),
+                onPressed: () => nav.push(AddJournal(fromHome: true)),
                 child: SizedBox(
                   width: double.infinity,
                   child: Text(
@@ -370,7 +370,7 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 children: [
                   ...state.journals
-                      .take(7)
+                      .take(5)
                       .map(
                         (journal) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
@@ -378,7 +378,9 @@ class _HomePageState extends State<HomePage> {
                             journal: journal,
                             isPreview: true,
                             onTap: () {
-                              nav.push(JournalPage(journal: journal));
+                              nav.push(
+                                JournalPage(journal: journal, fromHome: true),
+                              );
                             },
                           ),
                         ),
@@ -386,6 +388,27 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             },
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              backgroundColor: BaseColors.gold3,
+            ),
+            onPressed: () => nav.push(JournalListPage()),
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                'See More Journals',
+                style: FontTheme.poppins14w600black().copyWith(
+                  color: BaseColors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ],
       ),

@@ -1,9 +1,14 @@
 part of '_pages.dart';
 
 class AnalyzeJournal extends StatefulWidget {
-  final Journal journal;
+  const AnalyzeJournal({
+    super.key,
+    required this.journal,
+    this.fromHome = false,
+  });
 
-  const AnalyzeJournal({super.key, required this.journal});
+  final bool fromHome;
+  final Journal journal;
 
   @override
   State<AnalyzeJournal> createState() => _AnalyzeJournalState();
@@ -512,7 +517,7 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
 
       final now = DateTime.now();
       final entry = DailyMoodEntry(
-        timestamp: now, 
+        timestamp: now,
         label:
             _analyzed?.emotion.label.toLowerCase() ?? updatedJournal.mood.name,
         emoji: _analyzed?.emotion.emoji ?? '🙂',
@@ -528,6 +533,9 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
       );
 
       get.get<HomepageJournalCubit>().updateJournals();
+      if (!widget.fromHome) {
+        get.get<JournalListCubit>().refreshAll();
+      }
 
       nav.pop(updatedJournal);
     });

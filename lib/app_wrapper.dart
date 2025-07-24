@@ -105,7 +105,7 @@ class NavigationMenu extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                onPressed: () => nav.push(AddJournal()),
+                onPressed: () => nav.push(AddJournal(fromHome: true)),
                 icon: const Icon(Icons.add, color: BaseColors.white, size: 28),
               ),
             ),

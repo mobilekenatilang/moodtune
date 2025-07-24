@@ -1,8 +1,9 @@
 part of '_pages.dart';
 
 class JournalPage extends StatefulWidget {
-  const JournalPage({super.key, required this.journal});
+  const JournalPage({super.key, required this.journal, this.fromHome = false});
 
+  final bool fromHome;
   final Journal journal;
 
   @override
@@ -398,19 +399,27 @@ class _JournalPageState extends State<JournalPage> {
         nav.pop();
         showSuccessSnackBar(context, 'Journal deleted successfully');
         get.get<HomepageJournalCubit>().updateJournals();
+        if (!widget.fromHome) {
+          get.get<JournalListCubit>().refreshAll();
+        }
       },
     );
   }
 
   void _navigateToAnalyze() {
-    nav.push(AnalyzeJournal(journal: _journal)).then((result) {
-      if (result != null && result is Journal) {
-        setState(() {
-          _journal = result;
-        });
-        get.get<HomepageJournalCubit>().updateJournals();
-      }
-    });
+    nav.push(AnalyzeJournal(journal: _journal, fromHome: widget.fromHome)).then(
+      (result) {
+        if (result != null && result is Journal) {
+          setState(() {
+            _journal = result;
+          });
+          get.get<HomepageJournalCubit>().updateJournals();
+          if (!widget.fromHome) {
+            get.get<JournalListCubit>().refreshAll();
+          }
+        }
+      },
+    );
   }
 
   Color _backgroundColor() {

@@ -1,9 +1,15 @@
 part of '_pages.dart';
 
 class AddJournal extends StatefulWidget {
-  const AddJournal({super.key, this.isEditing = false, this.journal});
+  const AddJournal({
+    super.key,
+    this.isEditing = false,
+    this.fromHome = false,
+    this.journal,
+  });
 
   final bool isEditing;
+  final bool fromHome;
   final Journal? journal; // Optional journal for editing
 
   @override
@@ -238,7 +244,9 @@ class _AddJournalState extends State<AddJournal> {
               ? () {
                   try {
                     final journal = _saveJournal();
-                    nav.pushReplacement(JournalPage(journal: journal));
+                    nav.pushReplacement(
+                      JournalPage(journal: journal, fromHome: widget.fromHome),
+                    );
                     showSuccessSnackBar(context, 'Jurnal berhasil disimpan!');
                   } catch (e) {
                     // Handle any errors that might occur during saving
@@ -307,7 +315,10 @@ class _AddJournalState extends State<AddJournal> {
                           nav.pop();
                           if (widget.isEditing) {
                             nav.pushReplacement(
-                              JournalPage(journal: widget.journal!),
+                              JournalPage(
+                                journal: widget.journal!,
+                                fromHome: widget.fromHome,
+                              ),
                             );
                           } else {
                             nav.pop();
@@ -378,6 +389,9 @@ class _AddJournalState extends State<AddJournal> {
       }
 
       get.get<HomepageJournalCubit>().updateJournals();
+      if (!widget.fromHome) {
+        get.get<JournalListCubit>().refreshAll();
+      }
 
       return journal;
     } else {
