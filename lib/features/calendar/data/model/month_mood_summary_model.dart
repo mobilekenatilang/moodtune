@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'day_mood_model.dart';
-
+import 'day_summary_model.dart';
 part 'month_mood_summary_model.freezed.dart';
 part 'month_mood_summary_model.g.dart';
 
@@ -9,8 +8,7 @@ abstract class MonthMoodSummaryModel with _$MonthMoodSummaryModel {
   const factory MonthMoodSummaryModel({
     required int year,
     required int month,
-    required List<DayMoodModel> days,
-    required double avgMood,
+    required List<DaySummaryModel> days,
     required Map<String, int> labelCount,
     required DateTime lastSync,
   }) = _MonthMoodSummaryModel;

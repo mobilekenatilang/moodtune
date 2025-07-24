@@ -5,7 +5,7 @@ import 'package:moodtune/core/extensions/_extensions.dart';
 import 'package:moodtune/core/themes/_themes.dart';
 import 'package:moodtune/core/utils/date_generator.dart';
 import 'package:moodtune/core/utils/show_snackbar.dart';
-import 'package:moodtune/features/calendar/data/model/day_mood_model.dart';
+import 'package:moodtune/features/calendar/data/model/daily_mood_entry.dart';
 import 'package:moodtune/features/calendar/data/model/month_mood_summary_model.dart';
 import 'package:moodtune/features/calendar/domain/usecases/_usecases.dart';
 import 'package:moodtune/features/home/presentation/cubit/_cubit.dart';

@@ -510,14 +510,15 @@ class _AnalyzeJournalState extends State<AnalyzeJournal>
         },
       );
 
-      // Simpan mood hari ini
       final now = DateTime.now();
-      final dayMood = DayMoodModel(
-        date: DateTime(now.year, now.month, now.day),
-        label: _analyzed!.emotion.label.toLowerCase(),
-        emoji: _analyzed!.emotion.emoji,
+      final entry = DailyMoodEntry(
+        timestamp: now, 
+        label:
+            _analyzed?.emotion.label.toLowerCase() ?? updatedJournal.mood.name,
+        emoji: _analyzed?.emotion.emoji ?? '🙂',
       );
-      final saveRes = await _calendarUsecases.execute({'save': dayMood});
+
+      final saveRes = await _calendarUsecases.execute({'save': entry});
       saveRes.fold(
         (fail) => LoggerService.e('Save day mood failed: ${fail.message}'),
         (parsed) {

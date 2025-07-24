@@ -4,7 +4,7 @@ import 'package:moodtune/core/api_call.dart';
 import 'package:moodtune/core/errors/failure.dart';
 import 'package:moodtune/core/extensions/_extensions.dart';
 import 'package:moodtune/features/calendar/data/datasources/_datasources.dart';
+import 'package:moodtune/features/calendar/data/model/daily_mood_entry.dart';
 import 'package:moodtune/features/calendar/domain/repositories/_repositories.dart';
-import 'package:moodtune/features/calendar/data/model/day_mood_model.dart';
 
 part 'calendar_repository_impl.dart';

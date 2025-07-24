@@ -19,7 +19,7 @@ class CalendarUsecases
     if (args is Map<String, dynamic>) {
       // 1) Simpan mood
       if (args.containsKey('save')) {
-        return _repository.saveDayMood(args['save'] as DayMoodModel);
+        return _repository.saveDayMood(args['save'] as DailyMoodEntry);
       }
       
       // 2) Load bulan tertentu
