@@ -8,24 +8,24 @@ String getFormattedDate(DateTime date) {
     'Feb',
     'Mar',
     'Apr',
-    'Mei',
+    'May',
     'Jun',
     'Jul',
-    'Ags',
+    'Aug',
     'Sep',
-    'Okt',
+    'Oct',
     'Nov',
-    'Des',
+    'Dec',
   ];
 
   const weekdays = [
-    'Senin',
-    'Selasa',
-    'Rabu',
-    'Kamis',
-    'Jumat',
-    'Sabtu',
-    'Minggu',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   String weekday = weekdays[date.weekday - 1];
@@ -50,13 +50,13 @@ TimeOfDay getTimeOfDay(DateTime time) {
 String getGreeting(DateTime time) {
   switch (getTimeOfDay(time)) {
     case TimeOfDay.morning:
-      return 'Selamat Pagi';
+      return 'Good Morning';
     case TimeOfDay.afternoon:
-      return 'Selamat Siang';
+      return 'Good Afternoon';
     case TimeOfDay.evening:
-      return 'Selamat Sore';
+      return 'Good Evening';
     case TimeOfDay.night:
-      return 'Selamat Malam';
+      return 'Good Night';
   }
 }
 
@@ -73,6 +73,7 @@ String getTime(DateTime postDate) {
   final diffInSeconds = difference.inSeconds;
   final diffInMinutes = difference.inMinutes;
   final diffInHours = difference.inHours;
+  final diffInDays = difference.inDays;
 
   if (diffInSeconds < 60) {
     return '${diffInSeconds}s';
@@ -81,6 +82,6 @@ String getTime(DateTime postDate) {
   } else if (diffInHours < 24) {
     return '${diffInHours}h';
   } else {
-    return DateFormat('dd MMM yyyy').format(postDate);
+    return '${diffInDays}d';
   }
 }

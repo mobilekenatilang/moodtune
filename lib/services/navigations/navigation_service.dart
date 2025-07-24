@@ -37,6 +37,11 @@ class NavigationService implements Navigation {
     return navigatorKey.currentState?.push<T>(route);
   }
 
+  Future<T?>? pushReplacementRoute<T, K>(Route<T> route, [String? routeName]) {
+    updateHistory(routeName);
+    return navigatorKey.currentState?.pushReplacement<T, K>(route);
+  }
+
   @override
   void pop<T>([T? result]) {
     navigatorKey.currentState?.pop<T>(result);
@@ -59,17 +64,12 @@ class NavigationService implements Navigation {
 
   Future<T?> splashPush<T>(Widget widget, [String? routeName]) async {
     updateHistory(routeName);
-    return navigatorKey.currentState?.pushReplacement(
-      CustomPageRoute(widget),
-    );
+    return navigatorKey.currentState?.pushReplacement(CustomPageRoute(widget));
   }
 }
 
 class SplashPageRoute<T> extends MaterialPageRoute<T> {
-  SplashPageRoute({
-    required super.builder,
-    super.settings,
-  });
+  SplashPageRoute({required super.builder, super.settings});
 
   @override
   Duration get transitionDuration => Duration.zero;
@@ -91,10 +91,7 @@ class CustomPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    return FadeTransition(
-      opacity: animation,
-      child: child,
-    );
+    return FadeTransition(opacity: animation, child: child);
   }
 
   @override

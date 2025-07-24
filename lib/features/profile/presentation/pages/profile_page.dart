@@ -21,10 +21,10 @@ class _ProfilePageState extends State<ProfilePage> {
   late TextEditingController _emailController;
   late TextEditingController _usernameController;
   late TextEditingController _singerController;
-  
+
   late ProfileBloc _bloc;
   late StreamSubscription<ProfileState> _subscription;
-  
+
   String? _profileImagePath;
   List<String> _selectedGenres = [];
   List<String> _favoriteSingers = [];
@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController = TextEditingController();
     _usernameController = TextEditingController();
     _singerController = TextEditingController();
-    
+
     _bloc = get<ProfileBloc>();
     _subscription = _bloc.stream.listen((state) {
       print('ProfilePage - State received: ${state.runtimeType}');
@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     });
-    
+
     print('ProfilePage - Adding FetchProfile event');
     _bloc.add(FetchProfile());
   }
@@ -121,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    
+
     if (pickedFile != null) {
       setState(() {
         _profileImagePath = pickedFile.path;
@@ -165,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
         favoriteGenres: _selectedGenres,
         isProfileComplete: true,
       );
-      
+
       _bloc.add(UpdateProfileData(updatedProfile));
     }
   }
@@ -174,11 +174,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BaseColors.alabaster,
-      body: _isLoading 
-        ? const Center(
-            child: CircularProgressIndicator(color: BaseColors.gold3),
-          )
-        : _isFirstTime ? _buildSetupProfile() : _buildProfileView(),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: BaseColors.gold3),
+            )
+          : _isFirstTime
+          ? _buildSetupProfile()
+          : _buildProfileView(),
     );
   }
 
@@ -203,11 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.music_note,
-                    size: 48,
-                    color: BaseColors.white,
-                  ),
+                  Icon(Icons.music_note, size: 48, color: BaseColors.white),
                   const SizedBox(height: 12),
                   Text(
                     'Welcome to MoodTune!',
@@ -228,7 +226,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 32),
-            
+
             // Setup Form
             _buildProfileForm(isSetup: true),
           ],
@@ -275,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                  
+
                   // In edit mode, show smaller profile indicator
                   if (_isEditMode)
                     Container(
@@ -291,10 +289,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   const SizedBox(height: 16),
-                  
+
                   // Name and Username
                   Text(
-                    _nameController.text.isEmpty ? 'Your Name' : _nameController.text,
+                    _nameController.text.isEmpty
+                        ? 'Your Name'
+                        : _nameController.text,
                     style: FontTheme.poppins24w700black().copyWith(
                       color: BaseColors.white,
                     ),
@@ -307,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Edit Button
                   if (!_isEditMode)
                     ElevatedButton(
@@ -319,7 +319,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: BaseColors.white,
                         foregroundColor: BaseColors.gold3,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 12,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
@@ -337,7 +340,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            
+
             // Content
             if (_isEditMode)
               Padding(
@@ -370,11 +373,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ? FileImage(File(_profileImagePath!))
                         : null,
                     child: _profileImagePath == null
-                        ? Icon(
-                            Icons.person,
-                            size: 50,
-                            color: BaseColors.gray3,
-                          )
+                        ? Icon(Icons.person, size: 50, color: BaseColors.gray3)
                         : null,
                   ),
                   Positioned(
@@ -405,7 +404,7 @@ class _ProfilePageState extends State<ProfilePage> {
           // Basic Info Section
           _buildSectionTitle('Basic Information'),
           const SizedBox(height: 16),
-          
+
           _buildTextField(
             controller: _nameController,
             label: 'Full Name',
@@ -418,7 +417,7 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           _buildTextField(
             controller: _emailController,
             label: 'Email',
@@ -428,14 +427,16 @@ class _ProfilePageState extends State<ProfilePage> {
               if (value == null || value.trim().isEmpty) {
                 return 'Email is required';
               }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(value)) {
                 return 'Please enter a valid email';
               }
               return null;
             },
           ),
           const SizedBox(height: 16),
-          
+
           _buildTextField(
             controller: _usernameController,
             label: 'Username',
@@ -455,7 +456,7 @@ class _ProfilePageState extends State<ProfilePage> {
           // Music Preferences Section
           _buildSectionTitle('Music Preferences'),
           const SizedBox(height: 16),
-          
+
           // Favorite Singers
           _buildSubSectionTitle('Favorite Singers'),
           const SizedBox(height: 8),
@@ -481,7 +482,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           const SizedBox(height: 12),
-          
+
           // Singers Chips
           if (_favoriteSingers.isNotEmpty)
             Wrap(
@@ -539,10 +540,12 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             child: Text(
               isSetup ? 'Complete Setup' : 'Save Changes',
-              style: FontTheme.poppins16w500black().copyWith(color: Colors.white),
+              style: FontTheme.poppins16w500black().copyWith(
+                color: Colors.white,
+              ),
             ),
           ),
-          
+
           if (!isSetup) ...[
             const SizedBox(height: 12),
             TextButton(
@@ -559,7 +562,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ],
-          
+
           // Extra bottom padding to avoid navbar overlap
           SizedBox(height: isSetup ? 100 : 80),
         ],
@@ -595,7 +598,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _buildInfoSection('Favorite Genres', _selectedGenres),
             ],
           ),
-          
+
           // Extra bottom padding to avoid navbar overlap
           const SizedBox(height: 100),
         ],
@@ -634,20 +637,18 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: FontTheme.poppins18w500black().copyWith(
-        color: BaseColors.gold3,
-      ),
+      style: FontTheme.poppins18w500black().copyWith(color: BaseColors.gold3),
     );
   }
 
   Widget _buildSubSectionTitle(String title) {
-    return Text(
-      title,
-      style: FontTheme.poppins16w500black(),
-    );
+    return Text(title, style: FontTheme.poppins16w500black());
   }
 
-  Widget _buildInfoCard({required String title, required List<Widget> children}) {
+  Widget _buildInfoCard({
+    required String title,
+    required List<Widget> children,
+  }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -719,22 +720,29 @@ class _ProfilePageState extends State<ProfilePage> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: items.map((item) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: BaseColors.goldenrod.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: BaseColors.goldenrod.withOpacity(0.3),
-              ),
-            ),
-            child: Text(
-              item,
-              style: FontTheme.poppins12w500black().copyWith(
-                color: BaseColors.gold3,
-              ),
-            ),
-          )).toList(),
+          children: items
+              .map(
+                (item) => Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: BaseColors.goldenrod.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: BaseColors.goldenrod.withOpacity(0.3),
+                    ),
+                  ),
+                  child: Text(
+                    item,
+                    style: FontTheme.poppins12w500black().copyWith(
+                      color: BaseColors.gold3,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
         ),
       ],
     );
